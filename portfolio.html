@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Piyush - CS Student | Aspiring Machine Learning Engineer | Python | Portfolio">
+  <title>Piyush | 3D Portfolio | Aspiring Machine Learning Engineer</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React 18 -->
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel Standalone (JSX Compiler) -->
+  <script src="https://unpkg.com/@babel/standalone@7.23.2/babel.min.js"></script>
+
+  <!-- Three.js (used in About section) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- EmailJS SDK (sends messages to your Gmail) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    // ════════════════════════════════════════════════════════
+    //  EMAILJS SETUP — 3 easy steps (all FREE):
+    //  1. Go to https://emailjs.com → Sign Up (free)
+    //  2. Add Service → Gmail → connect piyushk4154@gmail.com
+    //     Copy the "Service ID"  → paste below
+    //  3. Create Email Template with variables:
+    //     {{from_name}}, {{from_email}}, {{message}}, {{to_name}}
+    //     Copy the "Template ID" → paste below
+    //  4. Account → API Keys → copy "Public Key" → paste below
+    // ════════════════════════════════════════════════════════
+    window.EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
+    window.EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz456'
+    window.EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'AbCdEf1234567890'
+
+    (function(){
+      if (window.emailjs) {
+        emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
+      }
+    })();
+  </script>
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            obsidian: '#060612',
+            'cyber-teal': '#06b6d4',
+            'cyber-purple': '#8b5cf6',
+            'cyber-green': '#10b981',
+            'cyber-pink': '#ec4899',
+          },
+          boxShadow: {
+            'neon-teal': '0 0 20px rgba(6,182,212,0.45)',
+            'neon-purple': '0 0 20px rgba(139,92,246,0.45)',
+            'neon-green': '0 0 20px rgba(16,185,129,0.45)',
+            'neon-pink': '0 0 20px rgba(236,72,153,0.45)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #060612; }
+    ::-webkit-scrollbar-thumb { background: #1e1b4b; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      background-color: #060612;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ── Grid background ── */
+    .cyber-grid {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* ── Glass helpers ── */
+    .glass-panel {
+      background: rgba(8,8,20,0.65);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .glass-card {
+      background: rgba(12,10,28,0.5);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: all 0.4s cubic-bezier(.16,1,.3,1);
+    }
+    .glass-card:hover {
+      border-color: rgba(6,182,212,0.38);
+      background: rgba(12,10,28,0.7);
+      box-shadow: 0 0 30px rgba(6,182,212,0.08);
+      transform: translateY(-4px);
+    }
+
+    /* ── Neon pulse animation ── */
+    @keyframes pulseGlow {
+      0%,100% { opacity:.18; transform:scale(1); }
+      50%      { opacity:.38; transform:scale(1.06); }
+    }
+    .pulsing-glow { animation: pulseGlow 7s ease-in-out infinite; }
+
+    /* ── Floating animation ── */
+    @keyframes float {
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(-12px); }
+    }
+    .float-anim { animation: float 4s ease-in-out infinite; }
+
+    /* ── Loading screen ── */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      background: #060612;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      transition: opacity 0.6s ease;
+    }
+    #loading-screen.fade-out { opacity: 0; pointer-events: none; }
+    .loader-ring {
+      width: 56px; height: 56px;
+      border: 3px solid rgba(6,182,212,0.2);
+      border-top-color: #06b6d4;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ── Smooth section fade-in ── */
+    .section-hidden { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+    .section-visible { opacity: 1; transform: translateY(0); }
+
+    /* ── no-scrollbar helper ── */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════ LOADING SCREEN ══════════════════ -->
+<div id="loading-screen">
+  <div class="loader-ring"></div>
+  <p class="loader-text">PIYUSH.DEV&nbsp;&nbsp;Loading...</p>
+</div>
+
+<!-- ══════════════════ PARTICLES CANVAS ══════════════════ -->
+<canvas id="pcanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;mix-blend-mode:screen;"></canvas>
+
+<!-- ══════════════════ REACT ROOT ══════════════════ -->
+<div id="root" style="position:relative;z-index:1;"></div>
+
+<!-- ══════════ PARTICLE SYSTEM (vanilla JS) ══════════ -->
+<script>
+(function(){
+  const cvs = document.getElementById('pcanvas');
+  const ctx = cvs.getContext('2d');
+  let particles = [];
+  const mouse = { x:null, y:null, r:160 };
+
+  function resize(){
+    cvs.width  = window.innerWidth;
+    cvs.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', e => { mouse.x=e.clientX; mouse.y=e.clientY; });
+  document.addEventListener('mouseleave', () => { mouse.x=null; mouse.y=null; });
+
+  function Particle(){
+    this.reset = function(){
+      this.x  = Math.random()*cvs.width;
+      this.y  = Math.random()*cvs.height;
+      this.vx = (Math.random()-.5)*.35;
+      this.vy = (Math.random()-.5)*.35;
+      this.r  = Math.random()*1.4+.6;
+      this.br = this.r;
+      const rnd = Math.random();
+      this.color = rnd>.82 ? 'rgba(6,182,212,.5)'
+                 : rnd>.7  ? 'rgba(139,92,246,.5)'
+                 : 'rgba(255,255,255,.13)';
+    };
+    this.reset();
+  }
+
+  const NUM = Math.min(Math.floor(window.innerWidth*window.innerHeight/10000), 110);
+  for(let i=0;i<NUM;i++){ const p=new Particle(); p.x=Math.random()*cvs.width; p.y=Math.random()*cvs.height; particles.push(p); }
+
+  function draw(){
+    ctx.clearRect(0,0,cvs.width,cvs.height);
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>cvs.width)  p.vx*=-1;
+      if(p.y<0||p.y>cvs.height) p.vy*=-1;
+
+      if(mouse.x!==null){
+        const dx=mouse.x-p.x, dy=mouse.y-p.y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<mouse.r){
+          const f=(mouse.r-dist)/mouse.r;
+          p.x-=(dx/dist)*f*2.2;
+          p.y-=(dy/dist)*f*2.2;
+          p.r=Math.min(p.br*1.9,3.2);
+        } else if(p.r>p.br) p.r-=.08;
+      } else if(p.r>p.br) p.r-=.08;
+
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.color;
+      ctx.fill();
+    });
+
+    // Connect nearby dots
+    for(let a=0;a<particles.length;a++){
+      for(let b=a+1;b<particles.length;b++){
+        const dx=particles[a].x-particles[b].x;
+        const dy=particles[a].y-particles[b].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<115){
+          ctx.beginPath();
+          ctx.strokeStyle=`rgba(255,255,255,${(1-d/115)*.045})`;
+          ctx.lineWidth=.7;
+          ctx.moveTo(particles[a].x,particles[a].y);
+          ctx.lineTo(particles[b].x,particles[b].y);
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+
+<!-- ══════════ REACT APP (JSX via Babel) ══════════ -->
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef, useCallback } = React;
+
+/* ─── SVG ICONS (inline, no external library needed) ─── */
+const Icon = ({ name, className="" }) => {
+  const icons = {
+    terminal: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>,
+    sparkles: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><path d="M5 3l.75 2.25L8 6l-2.25.75L5 9l-.75-2.25L2 6l2.25-.75z"/><path d="M19 13l.75 2.25L22 16l-2.25.75L19 19l-.75-2.25L16 16l2.25-.75z"/></svg>,
+    download: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
+    sun: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>,
+    moon: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>,
+    menu: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
+    x: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
+    brain: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M9 3a3 3 0 00-3 3 3 3 0 00-1 2.25A3.75 3.75 0 003 12a3.75 3.75 0 003 3.674V18a3 3 0 006 0v-.326A3.75 3.75 0 0015 14a3.75 3.75 0 001-2.55A3 3 0 0015 6a3 3 0 00-3-3H9z"/></svg>,
+    database: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>,
+    eye: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
+    code: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
+    server: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>,
+    'bar-chart': <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>,
+    'git-branch': <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M18 9a9 9 0 01-9 9"/></svg>,
+    'external-link': <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>,
+    mail: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>,
+    phone: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>,
+    send: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
+    check: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>,
+    'chevron-up': <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><polyline points="18 15 12 9 6 15"/></svg>,
+    shield: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+  };
+  return icons[name] || icons['code'];
+};
+
+/* ─── GITHUB & LINKEDIN SVG ─── */
+const GithubIcon = ({ className="" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+  </svg>
+);
+
+const LinkedinIcon = ({ className="" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+  </svg>
+);
+
+/* ─────────────────────────────────────────────────────── */
+/*  1. NAVBAR                                             */
+/* ─────────────────────────────────────────────────────── */
+const Navbar = ({ active, dark, toggleDark }) => {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 30);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  const go = (e, id) => {
+    e.preventDefault();
+    setOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const links = ['home','about','skills','projects','timeline','contact'];
+
+  return (
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-3 glass-panel border-b border-white/5' : 'py-5 bg-transparent'}`}>
+      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
+
+        {/* Logo */}
+        <a href="#home" onClick={e=>go(e,'home')} className="flex items-center gap-2 font-heading font-extrabold text-lg tracking-wider">
+          <Icon name="terminal" className="w-5 h-5 text-cyber-teal" />
+          <span className="bg-gradient-to-r from-cyber-teal to-cyber-purple bg-clip-text text-transparent">PIYUSH.DEV</span>
+        </a>
+
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {links.map(l => (
+            <a key={l} href={`#${l}`} onClick={e=>go(e,l)}
+               className={`text-sm font-medium tracking-wide transition-colors capitalize relative py-1.5
+                 ${active===l ? 'text-cyber-teal' : 'text-slate-400 hover:text-white'}`}>
+              {l}
+              <span className={`absolute bottom-0 left-0 h-[2px] w-full rounded-full bg-cyber-teal transition-transform duration-300 origin-left ${active===l?'scale-x-100':'scale-x-0'}`}/>
+            </a>
+          ))}
+        </div>
+
+        {/* Controls */}
+        <div className="flex items-center gap-3">
+          <button onClick={toggleDark} className="p-2 glass-panel rounded-lg text-slate-400 hover:text-cyber-teal transition-colors">
+            <Icon name={dark?'sun':'moon'} className="w-4 h-4"/>
+          </button>
+          <a href="#contact" onClick={e=>go(e,'contact')}
+             className="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-cyber-teal text-obsidian text-xs font-bold uppercase tracking-wider rounded-lg hover:opacity-90 transition-opacity">
+            <Icon name="mail" className="w-3.5 h-3.5"/>
+            Hire Me
+          </a>
+          <button onClick={()=>setOpen(!open)} className="md:hidden p-2 glass-panel rounded-lg text-slate-300">
+            <Icon name={open?'x':'menu'} className="w-5 h-5"/>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile overlay */}
+      {open && (
+        <div className="md:hidden fixed inset-0 top-[60px] bg-obsidian/97 backdrop-blur-xl flex flex-col items-center justify-center gap-8 z-40">
+          {links.map(l => (
+            <a key={l} href={`#${l}`} onClick={e=>go(e,l)}
+               className={`text-2xl font-heading font-bold capitalize ${active===l?'text-cyber-teal':'text-slate-300'}`}>
+              {l}
+            </a>
+          ))}
+        </div>
+      )}
+    </nav>
+  );
+};
+
+
+/* ─────────────────────────────────────────────────────── */
+/*  2. HERO (Now showcasing Piyush's profile photo)       */
+/* ─────────────────────────────────────────────────────── */
+const Hero = () => {
+  const roles = ['Python Developer','AI-Assisted Web Developer','Data Science Explorer'];
+  const [ri, setRi] = useState(0);
+  const [txt, setTxt] = useState('');
+  const [del, setDel] = useState(false);
+
+  /* typing effect */
+  useEffect(() => {
+    const role = roles[ri];
+    const speed = del ? 40 : 85;
+    const t = setTimeout(() => {
+      if (!del) {
+        const next = role.slice(0, txt.length+1);
+        setTxt(next);
+        if (next === role) setTimeout(()=>setDel(true), 1600);
+      } else {
+        const next = role.slice(0, txt.length-1);
+        setTxt(next);
+        if (next === '') { setDel(false); setRi(p=>(p+1)%roles.length); }
+      }
+    }, speed);
+    return () => clearTimeout(t);
+  }, [txt, del, ri]);
+
+  return (
+    <section id="home" className="relative min-h-screen flex items-center py-24 px-6 md:px-12 bg-obsidian overflow-hidden">
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-cyber-purple/10 blur-[130px] pulsing-glow pointer-events-none"/>
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-cyber-teal/8 blur-[130px] pulsing-glow pointer-events-none"/>
+      <div className="absolute inset-0 cyber-grid opacity-25 pointer-events-none"/>
+
+      <div className="max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+        {/* TEXT */}
+        <div className="space-y-7 order-2 lg:order-1 text-center lg:text-left">
+          <div className="inline-flex items-center gap-2 px-4 py-2 glass-panel rounded-full text-xs font-semibold text-cyber-teal uppercase tracking-widest">
+            <Icon name="sparkles" className="w-3.5 h-3.5 text-cyber-teal animate-pulse"/>
+            Welcome to my Digital Space
+          </div>
+
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold text-white leading-tight">
+            Hi, I'm{' '}
+            <span className="bg-gradient-to-r from-cyber-teal via-cyber-purple to-cyber-pink bg-clip-text text-transparent">
+              Piyush
+            </span>
+          </h1>
+
+          <h2 className="text-xl md:text-2xl font-medium text-slate-300 min-h-[36px] flex items-center justify-center lg:justify-start gap-1">
+            <span>{txt}</span>
+            <span className="border-r-2 border-cyber-teal h-6 animate-pulse ml-0.5"/>
+          </h2>
+
+          <p className="text-base text-slate-400 leading-relaxed max-w-lg mx-auto lg:mx-0 font-light">
+            A passionate Computer Science student building high-performance
+            <span className="text-cyber-teal font-medium"> ML models</span> and
+            <span className="text-cyber-green font-medium"> intelligent systems</span>.
+          </p>
+
+          <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+            <button onClick={()=>document.getElementById('projects').scrollIntoView({behavior:'smooth'})}
+              className="px-7 py-3.5 bg-gradient-to-r from-cyber-teal to-cyber-purple text-white font-bold rounded-xl shadow-neon-teal hover:scale-105 transition-transform text-sm tracking-wide">
+              View Projects
+            </button>
+            <button onClick={()=>document.getElementById('contact').scrollIntoView({behavior:'smooth'})}
+              className="px-7 py-3.5 border border-white/10 hover:border-cyber-teal bg-white/5 hover:bg-cyber-teal/5 text-slate-300 hover:text-cyber-teal font-semibold rounded-xl transition-all text-sm">
+              Contact Me
+            </button>
+          </div>
+        </div>
+
+        {/* BEAUTIFUL PROFILE IMAGE PORTRAIT CARD */}
+        <div className="order-1 lg:order-2 h-[360px] md:h-[480px] lg:h-[520px] flex items-center justify-center relative">
+          <div className="relative w-[280px] sm:w-[340px] md:w-[380px] aspect-[3/4] rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(139,92,246,0.15)] group transition-all duration-500 hover:border-cyber-teal hover:shadow-[0_0_50px_rgba(6,182,212,0.3)] float-anim">
+            {/* Background gradient glowing aura */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-cyber-purple/20 via-transparent to-cyber-teal/20 opacity-60 group-hover:opacity-100 transition-opacity duration-500 z-0"/>
+            <img src="piyush.jpg" alt="Piyush" className="w-full h-full object-cover relative z-10 transition-transform duration-700 group-hover:scale-105" />
+            {/* Decorative corner borders */}
+            <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-cyber-teal z-20"/>
+            <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-cyber-teal z-20"/>
+            <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-cyber-teal z-20"/>
+            <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-cyber-teal z-20"/>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+/* ─────────────────────────────────────────────────────── */
+/*  3. ABOUT                                              */
+/* ─────────────────────────────────────────────────────── */
+const About = () => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const el = canvas.parentElement;
+
+    const scene  = new THREE.Scene();
+    const cam    = new THREE.PerspectiveCamera(50, el.clientWidth/el.clientHeight, 0.1, 100);
+    cam.position.z = 4.2;
+    const ren = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+    ren.setSize(el.clientWidth, el.clientHeight);
+
+    const sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(.82, 32, 32),
+      new THREE.MeshStandardMaterial({ color:0x8b5cf6, emissive:0x8b5cf6, emissiveIntensity:.9 })
+    );
+    scene.add(sphere);
+
+    const cube = new THREE.Mesh(
+      new THREE.BoxGeometry(2.1,2.1,2.1),
+      new THREE.MeshStandardMaterial({ color:0x06b6d4, wireframe:true })
+    );
+    scene.add(cube);
+
+    scene.add(new THREE.AmbientLight(0x666666));
+    const pl = new THREE.PointLight(0x10b981,12,12); pl.position.set(2,2,2); scene.add(pl);
+
+    const clock = new THREE.Clock();
+    let raf;
+    const loop = () => {
+      raf = requestAnimationFrame(loop);
+      const t = clock.getElapsedTime();
+      cube.rotation.x = t*.35; cube.rotation.y = t*.5;
+      cube.position.y = sphere.position.y = Math.sin(t*1.4)*.14;
+      ren.render(scene, cam);
+    };
+    loop();
+    const onR = () => { cam.aspect=el.clientWidth/el.clientHeight; cam.updateProjectionMatrix(); ren.setSize(el.clientWidth,el.clientHeight); };
+    window.addEventListener('resize',onR);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize',onR); };
+  }, []);
+
+  const tilt = e => {
+    const c = e.currentTarget, r = c.getBoundingClientRect();
+    const tx = ((e.clientY-r.top)/r.height-.5)*-16;
+    const ty = ((e.clientX-r.left)/r.width-.5)*16;
+    c.style.transform = `perspective(900px) rotateX(${tx}deg) rotateY(${ty}deg) scale(1.03)`;
+  };
+  const reset = e => { e.currentTarget.style.transform=''; };
+
+  const cards = [
+    { icon:'brain', color:'text-cyber-teal', bg:'bg-cyber-teal/5 border-cyber-teal/20', title:'ML Engineering', desc:'Supervised models, clustering, data pipelines & predictive analytics.' },
+    { icon:'server', color:'text-cyber-purple', bg:'bg-cyber-purple/5 border-cyber-purple/20', title:'Python Core', desc:'High-level computing scripts, automation, and core architecture.' },
+    { icon:'database', color:'text-cyber-green', bg:'bg-cyber-green/5 border-cyber-green/20', title:'Data Science', desc:'Pandas, NumPy, Matplotlib — EDA, pattern discovery & data visualisation.' },
+  ];
+
+  return (
+    <section id="about" className="relative min-h-screen flex items-center py-24 px-6 md:px-12 bg-obsidian overflow-hidden">
+      <div className="absolute inset-0 cyber-grid opacity-15 pointer-events-none"/>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-cyber-purple/5 blur-[130px] pulsing-glow pointer-events-none"/>
+
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+        <div className="space-y-10">
+          <div>
+            <span className="text-xs uppercase font-extrabold tracking-widest text-cyber-teal border-l-2 border-cyber-teal pl-3">Who I Am</span>
+            <h2 className="mt-3 text-4xl md:text-5xl font-heading font-extrabold text-white leading-tight">
+              Crafting Intelligent<br/>Solutions
+            </h2>
+          </div>
+          <p className="text-lg text-slate-300 font-light leading-relaxed">
+            I'm a passionate CS student focused on{' '}
+            <span className="text-cyber-teal font-medium">Python</span>,{' '}
+            <span className="text-cyber-purple font-medium">Machine Learning</span>,{' '}
+            <span className="text-cyber-green font-medium">Data Analysis</span> &{' '}
+            <span className="text-cyber-teal font-medium">Backend Logic</span>.
+            I love turning raw data into insights and ideas into products.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {cards.map(c => (
+              <div key={c.title} onMouseMove={tilt} onMouseLeave={reset}
+                   className="glass-card rounded-2xl p-5 cursor-pointer transition-all duration-300"
+                   style={{transformStyle:'preserve-3d'}}>
+                <div className={`inline-flex p-2.5 rounded-xl border mb-4 ${c.bg}`}>
+                  <Icon name={c.icon} className={`w-5 h-5 ${c.color}`}/>
+                </div>
+                <h3 className="font-heading font-bold text-white mb-1.5">{c.title}</h3>
+                <p className="text-xs text-slate-400 font-light leading-relaxed">{c.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Spinning cube canvas */}
+        <div className="h-[360px] md:h-[440px] relative rounded-3xl overflow-hidden border border-white/5 bg-white/2">
+          <canvas ref={canvasRef} className="w-full h-full block"/>
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] text-slate-500 uppercase tracking-widest font-bold pointer-events-none">
+            <Icon name="eye" className="w-3.5 h-3.5 text-cyber-teal"/>
+            Interactive 3D Grid
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+/* ─────────────────────────────────────────────────────── */
+/*  4. SKILLS (Percentages & Progress Bars Removed)        */
+/* ─────────────────────────────────────────────────────── */
+const Skills = () => {
+  const skills = [
+    { name:'Python',                             color:'cyber-teal',   icon:'code'      },
+    { name:'Pandas',                             color:'cyber-purple', icon:'database'  },
+    { name:'NumPy',                              color:'cyber-green',  icon:'bar-chart' },
+    { name:'Matplotlib',                         color:'cyber-green',  icon:'bar-chart' },
+    { name:'AI-Assisted Web Development',        color:'cyber-purple', icon:'code'      },
+    { name:'HTML & CSS',                         color:'cyber-pink',   icon:'eye'       },
+    { name:'Data Analysis',                      color:'cyber-green',  icon:'bar-chart' },
+    { name:'Git & GitHub',                       color:'cyber-teal',   icon:'git-branch'},
+    { name:'Scikit-Learn',                       color:'cyber-purple', icon:'brain'     },
+    { name:'DSA',                                color:'cyber-pink',   icon:'shield'    },
+  ];
+
+  const tilt = e => {
+    const el=e.currentTarget, r=el.getBoundingClientRect();
+    el.style.transform=`perspective(800px) rotateX(${((e.clientY-r.top)/r.height-.5)*-12}deg) rotateY(${((e.clientX-r.left)/r.width-.5)*12}deg) translateY(-3px)`;
+  };
+  const reset = e => { e.currentTarget.style.transform=''; };
+
+  return (
+    <section id="skills" className="relative py-24 px-6 md:px-12 bg-obsidian overflow-hidden">
+      <div className="absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full bg-cyber-teal/5 blur-[110px] pulsing-glow pointer-events-none"/>
+      <div className="absolute bottom-1/4 left-0 w-[400px] h-[400px] rounded-full bg-cyber-purple/5 blur-[110px] pulsing-glow pointer-events-none"/>
+
+      <div className="max-w-7xl mx-auto space-y-14">
+        <div className="text-center max-w-2xl mx-auto">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-cyber-purple border-l-2 border-cyber-purple px-3">Expertise</span>
+          <h2 className="mt-3 text-4xl md:text-5xl font-heading font-extrabold text-white">Skills & Toolkit</h2>
+          <p className="mt-4 text-slate-400 font-light font-sans">A curated toolkit focused on core algorithms, high performance data modules, and clean programming.</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+          {skills.map(s => (
+            <div key={s.name} onMouseMove={tilt} onMouseLeave={reset}
+                 className={`glass-card p-6 rounded-2xl border border-white/5 hover:border-${s.color}/40 hover:shadow-neon-${s.color==='cyber-teal'?'teal':s.color==='cyber-purple'?'purple':s.color==='cyber-green'?'green':'pink'} cursor-pointer transition-all duration-300 flex flex-col justify-between`}
+                 style={{transformStyle:'preserve-3d'}}>
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-2.5 rounded-xl bg-white/5 border border-white/10 text-${s.color}`}>
+                  <Icon name={s.icon} className="w-5 h-5"/>
+                </div>
+              </div>
+              <h3 className="font-heading font-bold text-white text-sm">{s.name}</h3>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+/* ─────────────────────────────────────────────────────── */
+/*  5. PROJECTS (Tech Stack Removed, Real Links Applied)  */
+/* ─────────────────────────────────────────────────────── */
+const Projects = () => {
+  const projects = [
+    {
+      id:'academics', title:"Let's Simplify Academics", sub:'Academic Productivity Platform',
+      grad:'from-cyber-teal to-cyber-purple', link:'https://letssimplifyacademicsmihona.netlify.app/',
+      desc:'A student-focused platform to streamline classroom tasks, schedules, task trackers, and study structures for maximum academic productivity.',
+      mockup:(
+        <div className="w-full h-full bg-slate-950 p-3.5 rounded-xl flex flex-col gap-2.5 border border-white/5 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-20 h-20 bg-cyber-teal/10 blur-xl rounded-full"/>
+          <div className="flex items-center gap-1.5 border-b border-white/5 pb-2">
+            <span className="w-2 h-2 rounded-full bg-red-400"/><span className="w-2 h-2 rounded-full bg-yellow-400"/><span className="w-2 h-2 rounded-full bg-green-400"/>
+            <span className="text-[9px] text-slate-500 font-mono ml-2">dashboard.json</span>
+            <span className="ml-auto text-[8px] bg-cyber-teal/10 text-cyber-teal px-1.5 py-0.5 rounded border border-cyber-teal/20 font-mono">Active</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2 flex-1">
+            <div className="col-span-2 bg-white/2 rounded-lg p-2.5 border border-white/5 flex flex-col justify-between">
+              <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wider">Workspace</span>
+              <div className="space-y-1.5">
+                <div className="h-1.5 w-full bg-cyber-teal/30 rounded-full"/><div className="h-1.5 w-4/5 bg-white/5 rounded-full"/><div className="h-1.5 w-2/3 bg-white/5 rounded-full"/>
+              </div>
+              <span className="text-[9px] text-cyber-teal font-mono">Progress: 88%</span>
+            </div>
+            <div className="bg-white/2 rounded-lg p-2 border border-white/5 flex flex-col items-center justify-center gap-1">
+              <div className="w-7 h-7 rounded-full border-2 border-cyber-purple flex items-center justify-center text-[9px] font-bold text-white">6/7</div>
+              <span className="text-[7px] text-slate-400">Sprints</span>
+            </div>
+          </div>
+          <div className="bg-white/2 rounded-lg p-2 border border-white/5 space-y-1">
+            <div className="flex justify-between text-[7px] text-slate-400"><span className="flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-cyber-teal"/>Solve algorithms</span><span className="text-cyber-teal">Done</span></div>
+            <div className="flex justify-between text-[7px] text-slate-400"><span className="flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-cyber-purple"/>Train ML model</span><span className="text-cyber-purple">Done</span></div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id:'tealogy', title:'Tealogy Cafe Website', sub:'Premium Food & Beverage UI',
+      grad:'from-cyber-purple to-cyber-pink', link:'https://piyushcafe.netlify.app/',
+      desc:'An elegant cafe website with stunning aesthetics, smooth product showcases, and interactive menus. Reimagines food UI and client branding with modern design.',
+      mockup:(
+        <div className="w-full h-full bg-neutral-950 p-3.5 rounded-xl flex flex-col gap-2.5 border border-white/5 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-20 h-20 bg-cyber-purple/10 blur-xl rounded-full"/>
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-serif font-extrabold italic text-white tracking-widest">TEALOGY</span>
+            <div className="flex gap-1"><span className="w-1 h-1 rounded-full bg-white/20"/><span className="w-1 h-1 rounded-full bg-white/20"/></div>
+          </div>
+          <div className="flex-1 bg-gradient-to-tr from-cyber-purple/15 to-cyber-pink/5 rounded-lg border border-white/5 flex items-center justify-between p-3">
+            <div>
+              <p className="text-[7px] text-slate-400 uppercase tracking-wider font-mono">Exclusive Brew</p>
+              <p className="text-[10px] font-bold text-white">Dark Hazelnut Teacino</p>
+              <p className="text-[9px] text-cyber-pink font-mono">$4.99</p>
+            </div>
+            <div className="w-10 h-14 bg-gradient-to-t from-cyber-purple to-cyber-pink rounded-b-xl rounded-t-sm shadow-[0_4px_15px_rgba(139,92,246,.4)]"/>
+          </div>
+          <div className="grid grid-cols-3 gap-1.5">
+            {['Matcha $3.49','Chai $2.99','Iced Tea $3.99'].map((t,i) => (
+              <div key={i} className={`rounded p-1.5 text-center border text-[7px] ${i===1?'bg-cyber-purple/10 border-cyber-purple/30 text-cyber-purple font-bold':'bg-white/2 border-white/5 text-white'}`}>{t}</div>
+            ))}
+          </div>
+        </div>
+      )
+    },
+    {
+      id:'dunesgo', title:'DunesGo Travel', sub:'Premium Tourism & Booking UI',
+      grad:'from-cyber-purple to-cyber-green', link:'https://dunesgo.netlify.app/',
+      desc:'A futuristic, fully-interactive travel booking platform showcasing safari packages, luxury desert stays, and curated tour itineraries.',
+      mockup:(
+        <div className="w-full h-full bg-slate-950 p-3.5 rounded-xl flex flex-col gap-2.5 border border-white/5 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-20 h-20 bg-cyber-green/10 blur-xl rounded-full"/>
+          <div className="flex items-center justify-between pb-1.5 border-b border-white/5">
+            <span className="text-[9px] text-slate-400 font-mono">dunesgo_travel</span>
+            <span className="text-[8px] bg-cyber-green/10 text-cyber-green px-1.5 py-0.5 rounded border border-cyber-green/20 font-mono">Active</span>
+          </div>
+          <div className="flex-1 bg-white/2 rounded-lg border border-white/5 p-2.5 flex flex-col justify-between">
+            <div>
+              <span className="text-[7px] text-slate-500 font-mono">Current Destination</span>
+              <p className="text-[11px] font-bold text-white mt-0.5">Golden Desert Dunes</p>
+            </div>
+            <div className="flex justify-between items-center text-[8px] text-slate-400">
+              <span>Duration: 5 Days</span>
+              <span className="text-cyber-teal font-bold">$299/person</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-[7px] text-slate-400">
+            <div className="bg-white/2 rounded p-1 border border-white/5 text-center">Safari Tours</div>
+            <div className="bg-white/2 rounded p-1 border border-white/5 text-center">Luxury Tents</div>
+          </div>
+        </div>
+      )
+    },
+  ];
+
+  const tilt = e => {
+    const c=e.currentTarget, r=c.getBoundingClientRect();
+    c.style.transform=`perspective(1100px) rotateX(${((e.clientY-r.top)/r.height-.5)*-7}deg) rotateY(${((e.clientX-r.left)/r.width-.5)*7}deg) scale(1.01)`;
+  };
+  const reset = e => { e.currentTarget.style.transform=''; };
+
+  return (
+    <section id="projects" className="relative py-24 px-6 md:px-12 bg-obsidian overflow-hidden">
+      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] rounded-full bg-cyber-purple/5 blur-[120px] pulsing-glow pointer-events-none"/>
+      <div className="absolute top-1/3 right-0 w-[450px] h-[450px] rounded-full bg-cyber-teal/5 blur-[120px] pulsing-glow pointer-events-none"/>
+
+      <div className="max-w-7xl mx-auto space-y-14">
+        <div>
+          <span className="text-xs uppercase font-extrabold tracking-widest text-cyber-teal border-l-2 border-cyber-teal pl-3">Portfolio</span>
+          <h2 className="mt-2 text-4xl md:text-5xl font-heading font-extrabold text-white">Featured Projects</h2>
+        </div>
+
+        <div className="space-y-10">
+          {projects.map(p => (
+            <div key={p.id} onMouseMove={tilt} onMouseLeave={reset}
+                 className="glass-card rounded-3xl p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 border border-white/5 hover:border-white/10 transition-all duration-300 relative overflow-hidden"
+                 style={{transformStyle:'preserve-3d'}}>
+              <div className={`absolute top-0 right-0 w-64 h-64 bg-gradient-to-tr ${p.grad} opacity-[0.04] blur-3xl pointer-events-none`}/>
+
+              {/* Mockup */}
+              <div className="lg:col-span-5">
+                <div className="aspect-[4/3] rounded-2xl p-1 bg-gradient-to-tr from-white/10 via-transparent to-white/10 border border-white/10 shadow-2xl">
+                  {p.mockup}
+                </div>
+              </div>
+
+              {/* Info */}
+              <div className="lg:col-span-7 flex flex-col justify-between gap-6">
+                <div className="space-y-3">
+                  <p className="text-xs font-mono text-slate-400 uppercase tracking-widest">{p.sub}</p>
+                  <h3 className="text-2xl md:text-3xl font-heading font-extrabold text-white">{p.title}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed font-light">{p.desc}</p>
+                </div>
+                <div className="space-y-4 pt-4 border-t border-white/5">
+                  <div className="flex gap-3">
+                    <a href="https://github.com/Piyush-dev" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-5 py-2.5 border border-white/10 hover:border-cyber-purple bg-white/5 hover:bg-cyber-purple/5 text-slate-300 hover:text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-all">
+                      <GithubIcon className="w-4 h-4"/>Code
+                    </a>
+                    <a href={p.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-5 py-2.5 border border-cyber-teal bg-cyber-teal/5 hover:bg-cyber-teal/15 text-cyber-teal text-xs font-bold uppercase tracking-wider rounded-lg shadow-neon-teal transition-all">
+                      <Icon name="external-link" className="w-4 h-4"/>Live Demo
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+/* ─────────────────────────────────────────────────────── */
+/*  6. TIMELINE                                           */
+/* ─────────────────────────────────────────────────────── */
+const Timeline = () => {
+  const steps = [
+    { n:'01', title:'Started Python',         sub:'Fundamentals & OOP',            icon:'code',       col:'cyber-teal',   tags:['Python','OOP','Data Types'], desc:'Mastered Python fundamentals, variables, loops, functions, OOP, and file structures.' },
+    { n:'02', title:'Pandas & NumPy',          sub:'Computational Foundations',      icon:'database',   col:'cyber-purple', tags:['Pandas','NumPy','Arrays'],   desc:'Matrix operations, vector computations, tabular analysis and high-performance data clean-ups.' },
+    { n:'03', title:'Data Visualisation',      sub:'Charts & Analytics',             icon:'bar-chart',  col:'cyber-green',  tags:['Matplotlib','Seaborn'],      desc:'Custom dashboards, scatter maps, decision boundary charts, and scientific visualisations.' },
+    { n:'04', title:'Machine Learning',        sub:'Predictive Modelling & AI',      icon:'brain',      col:'cyber-purple', tags:['Scikit-Learn','SVM','RF'],    desc:'Regression, SVM, random forests, model pipelines and accuracy optimisation techniques.' },
+    { n:'05', title:'OpenCV & Vision',          sub:'Computer Vision & Image AI',     icon:'eye',        col:'cyber-teal',   tags:['OpenCV','CV2','Image Processing'], desc:'Real-time image processing, object detection, face recognition, and computer vision pipelines using OpenCV.' },
+    { n:'06', title:'DSA Mastery',             sub:'Algorithms & Complexity',        icon:'shield',     col:'cyber-pink',   tags:['DSA','Trees','Big-O'],       desc:'Binary trees, dynamic programming, sorting algorithms and time/space complexity analysis.' },
+  ];
+
+  const colMap = { 'cyber-teal':'text-cyber-teal border-cyber-teal/30 hover:border-cyber-teal', 'cyber-purple':'text-cyber-purple border-cyber-purple/30 hover:border-cyber-purple', 'cyber-green':'text-cyber-green border-cyber-green/30 hover:border-cyber-green', 'cyber-pink':'text-cyber-pink border-cyber-pink/30 hover:border-cyber-pink' };
+  const dotMap = { 'cyber-teal':'bg-cyber-teal', 'cyber-purple':'bg-cyber-purple', 'cyber-green':'bg-cyber-green', 'cyber-pink':'bg-cyber-pink' };
+
+  return (
+    <section id="timeline" className="relative py-24 px-6 md:px-12 bg-obsidian overflow-hidden">
+      <div className="absolute top-1/3 left-0 w-[500px] h-[500px] rounded-full bg-cyber-teal/5 blur-[120px] pulsing-glow pointer-events-none"/>
+      <div className="absolute bottom-1/3 right-0 w-[500px] h-[500px] rounded-full bg-cyber-purple/5 blur-[120px] pulsing-glow pointer-events-none"/>
+
+      <div className="max-w-5xl mx-auto space-y-14">
+        <div className="text-center">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-cyber-teal border-l-2 border-cyber-teal px-3">Journey</span>
+          <h2 className="mt-3 text-4xl md:text-5xl font-heading font-extrabold text-white">Learning Timeline</h2>
+          <p className="mt-4 text-slate-400 font-light max-w-xl mx-auto">A chronological map of my growth milestones as a Computer Science explorer.</p>
+        </div>
+
+        <div className="relative">
+          {/* centre line */}
+          <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-px bg-white/5 -translate-x-px"/>
+          <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-cyber-teal via-cyber-purple to-cyber-pink -translate-x-px shadow-[0_0_8px_rgba(6,182,212,.5)]"/>
+
+          <div className="space-y-14">
+            {steps.map((s,i)=>{
+              const even = i%2===0;
+              return (
+                <div key={s.n} className={`flex flex-col lg:flex-row relative items-start lg:items-center ${even?'lg:flex-row-reverse':''}`}>
+                  {/* dot */}
+                  <div className="absolute left-6 lg:left-1/2 -translate-x-3 w-6 h-6 rounded-full bg-obsidian border-2 border-white/10 z-10 flex items-center justify-center">
+                    <div className={`w-2.5 h-2.5 rounded-full ${dotMap[s.col]}`}/>
+                  </div>
+
+                  <div className="hidden lg:block w-1/2"/>
+
+                  <div className="w-full lg:w-1/2 pl-12 lg:pl-0 lg:px-10">
+                    <div className={`glass-card p-6 rounded-2xl border group transition-all duration-300 ${colMap[s.col]}`}>
+                      <span className={`text-xs font-mono font-bold ${s.col==='cyber-teal'?'text-cyber-teal':s.col==='cyber-purple'?'text-cyber-purple':s.col==='cyber-green'?'text-cyber-green':'text-cyber-pink'} absolute top-4 right-5`}>Step {s.n}</span>
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="p-2.5 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 transition-colors">
+                          <Icon name={s.icon} className={`w-5 h-5 ${s.col==='cyber-teal'?'text-cyber-teal':s.col==='cyber-purple'?'text-cyber-purple':s.col==='cyber-green'?'text-cyber-green':'text-cyber-pink'}`}/>
+                        </div>
+                        <div>
+                          <h3 className="font-heading font-extrabold text-white group-hover:text-cyber-teal transition-colors">{s.title}</h3>
+                          <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">{s.sub}</p>
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-400 leading-relaxed mb-4">{s.desc}</p>
+                      <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/5">
+                        {s.tags.map(t=><span key={t} className="text-[10px] font-mono px-2.5 py-0.5 bg-white/5 text-slate-300 border border-white/5 rounded-full">{t}</span>)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+/* ─────────────────────────────────────────────────────── */
+/*  7. CONTACT                                            */
+/* ─────────────────────────────────────────────────────── */
+const Contact = () => {
+  const [form, setForm]     = useState({ name:'', email:'', message:'' });
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState('idle');   // idle | loading | success | error
+  const [errMsg, setErrMsg] = useState('');
+
+  const validate = () => {
+    const e = {};
+    if (!form.name.trim())    e.name    = 'Name is required';
+    if (!form.email.trim())   e.email   = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = 'Invalid email address';
+    if (!form.message.trim()) e.message = 'Message is required';
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const submit = async ev => {
+    ev.preventDefault();
+    if (!validate()) return;
+    setStatus('loading');
+
+    // Build a beautifully formatted WhatsApp message
+    const waText =
+      `Hi Piyush! 👋 I found you through your portfolio.%0A%0A` +
+      `*Name:* ${encodeURIComponent(form.name)}%0A` +
+      `*Email:* ${encodeURIComponent(form.email)}%0A%0A` +
+      `*Message:*%0A${encodeURIComponent(form.message)}`;
+
+    const waNumber = '918517945007';   // +91 India country code
+    const waUrl    = `https://wa.me/${waNumber}?text=${waText}`;
+
+    // Short delay for the loading spinner feel
+    await new Promise(r => setTimeout(r, 800));
+
+    setStatus('success');
+    if (window.confetti) {
+      confetti({ particleCount:180, spread:85, origin:{y:0.6},
+        colors:['#25D366','#06b6d4','#8b5cf6','#10b981','#ec4899'] });
+    }
+
+    // Open WhatsApp in a new tab
+    window.open(waUrl, '_blank');
+  };
+
+  const inp    = 'w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-slate-500 transition-all duration-300 focus:outline-none focus:border-cyber-teal focus:bg-white/8 focus:shadow-[0_0_16px_rgba(6,182,212,0.25)]';
+  const errInp = 'w-full px-4 py-3.5 bg-red-500/5 border border-red-500/40 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none';
+
+  return (
+    <section id="contact" className="relative min-h-screen flex items-center py-16 sm:py-24 px-4 sm:px-6 md:px-12 bg-obsidian overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute inset-0 cyber-grid opacity-20 pointer-events-none"/>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] rounded-full bg-cyber-teal/5 blur-[140px] pulsing-glow pointer-events-none"/>
+
+      <div className="max-w-6xl mx-auto w-full">
+
+        {/* Section header */}
+        <div className="text-center mb-12">
+          <span className="inline-block text-xs uppercase font-extrabold tracking-widest text-cyber-purple border border-cyber-purple/30 bg-cyber-purple/10 px-4 py-1.5 rounded-full">Get in Touch</span>
+          <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white leading-tight">Let's <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-teal to-cyber-purple">Connect</span></h2>
+          <p className="mt-3 text-slate-400 font-light leading-relaxed text-sm sm:text-base max-w-xl mx-auto">Have a project, ML idea, or opportunity? Drop a message — let's build something amazing together.</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
+
+          {/* Left — Contact info */}
+          <div className="lg:col-span-5 flex flex-col justify-center space-y-4">
+
+            {/* WhatsApp — primary contact */}
+            <a href="https://wa.me/918517945007" target="_blank" rel="noopener noreferrer"
+               className="flex items-center gap-4 p-4 glass-card hover:border-[#25D366] rounded-2xl group transition-all duration-300" style={{borderColor:'transparent'}}>
+              <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-[#25D366]/10 group-hover:border-[#25D366]/30 transition-all flex-shrink-0">
+                {/* WhatsApp icon inline SVG */}
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="#25D366">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">WhatsApp</p>
+                <p className="text-sm font-mono" style={{color:'#25D366'}}>+91 8517945007</p>
+              </div>
+              <Icon name="arrow-right" className="w-4 h-4 text-slate-600 ml-auto flex-shrink-0 transition-colors" style={{color:'#25D366', opacity:0}}/>
+            </a>
+
+            {/* Phone */}
+            <a href="tel:+85177945007"
+               className="flex items-center gap-4 p-4 glass-card hover:border-cyber-purple rounded-2xl group transition-all duration-300">
+              <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-cyber-purple/10 group-hover:border-cyber-purple/30 transition-all flex-shrink-0">
+                <Icon name="phone" className="w-5 h-5 text-cyber-purple"/>
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Phone</p>
+                <p className="text-sm text-slate-300 group-hover:text-white font-mono">+85177945007</p>
+              </div>
+              <Icon name="arrow-right" className="w-4 h-4 text-slate-600 group-hover:text-cyber-purple ml-auto flex-shrink-0 transition-colors"/>
+            </a>
+
+            {/* GitHub + LinkedIn grid */}
+            <div className="grid grid-cols-2 gap-3">
+              <a href="https://github.com/Piyush-dev" target="_blank" rel="noopener noreferrer"
+                 className="flex items-center gap-3 p-3.5 glass-card hover:border-cyber-green rounded-2xl group transition-all duration-300">
+                <GithubIcon className="w-5 h-5 text-cyber-green flex-shrink-0"/>
+                <div className="min-w-0">
+                  <p className="text-[9px] text-slate-500 uppercase tracking-wider font-bold">GitHub</p>
+                  <p className="text-xs text-slate-300 font-mono truncate">Piyush-dev</p>
+                </div>
+              </a>
+              <a href="https://www.linkedin.com/in/piyush-kushwaha-836554373" target="_blank" rel="noopener noreferrer"
+                 className="flex items-center gap-3 p-3.5 glass-card hover:border-cyber-pink rounded-2xl group transition-all duration-300">
+                <LinkedinIcon className="w-5 h-5 text-cyber-pink flex-shrink-0"/>
+                <div className="min-w-0">
+                  <p className="text-[9px] text-slate-500 uppercase tracking-wider font-bold">LinkedIn</p>
+                  <p className="text-xs text-slate-300 font-mono truncate">Piyush K.</p>
+                </div>
+              </a>
+            </div>
+
+            {/* Quick note */}
+            <div className="p-4 rounded-2xl border border-cyber-teal/20 bg-cyber-teal/5">
+              <p className="text-xs text-slate-400 leading-relaxed">
+                <span className="text-cyber-teal font-bold">⚡ Response time:</span> Usually within 24 hours. Feel free to reach out anytime!
+              </p>
+            </div>
+          </div>
+
+          {/* Right — Form */}
+          <div className="lg:col-span-7">
+            <div className="glass-panel p-6 sm:p-8 md:p-10 rounded-3xl relative overflow-hidden shadow-2xl">
+
+              {/* Glow accent */}
+              <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-cyber-purple/10 blur-3xl pointer-events-none"/>
+
+              {status === 'success' ? (
+                /* ── Success state ── */
+                <div className="flex flex-col items-center justify-center py-10 sm:py-14 text-center gap-5">
+                  <div className="w-20 h-20 rounded-full flex items-center justify-center animate-bounce" style={{background:'rgba(37,211,102,0.1)', border:'1px solid rgba(37,211,102,0.3)'}}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10" viewBox="0 0 24 24" fill="#25D366">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl sm:text-3xl font-heading font-extrabold text-white">Thank You So Much! 🙏</h3>
+                    <p className="text-xs font-mono uppercase tracking-widest mt-1 animate-pulse" style={{color:'#25D366'}}>Message Ready on WhatsApp ✔</p>
+                  </div>
+                  <p className="text-base text-slate-300 max-w-sm leading-relaxed text-center">
+                    You're amazing for reaching out! 💚<br/>
+                    Your message means a lot to me.<br/>
+                    <span className="text-white font-semibold">I'll get back to you very soon!</span>
+                  </p>
+                  <p className="text-xs text-slate-500 font-mono italic">— Piyush Kushwaha</p>
+                  <button onClick={()=>{ setStatus('idle'); setForm({name:'',email:'',message:''}); }}
+                    className="mt-2 px-7 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all"
+                    style={{background:'rgba(37,211,102,0.12)', border:'1px solid rgba(37,211,102,0.3)', color:'#25D366'}}>
+                    ✦ Send Another Message
+                  </button>
+                </div>
+              ) : (
+                /* ── Form state ── */
+                <form onSubmit={submit} noValidate className="space-y-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Icon name="sparkles" className="w-5 h-5 text-cyber-teal animate-pulse"/>
+                    <h3 className="text-xl font-heading font-extrabold text-white">Send a Message</h3>
+                  </div>
+
+                  {/* Error banner */}
+                  {status === 'error' && errMsg && (
+                    <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 font-mono leading-relaxed">
+                      {errMsg}
+                    </div>
+                  )}
+
+                  {/* Name + Email side by side on sm+ */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-1.5">Full Name</label>
+                      <input type="text" placeholder="Piyush Sharma" autoComplete="name"
+                        className={errors.name ? errInp : inp}
+                        value={form.name}
+                        onChange={e=>{ setForm({...form, name:e.target.value}); setErrors({...errors, name:null}); if(status==='error') setStatus('idle'); }}/>
+                      {errors.name && <p className="text-[10px] text-red-400 mt-1 font-mono">{errors.name}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-1.5">Email Address</label>
+                      <input type="email" placeholder="hello@example.com" autoComplete="email"
+                        className={errors.email ? errInp : inp}
+                        value={form.email}
+                        onChange={e=>{ setForm({...form, email:e.target.value}); setErrors({...errors, email:null}); if(status==='error') setStatus('idle'); }}/>
+                      {errors.email && <p className="text-[10px] text-red-400 mt-1 font-mono">{errors.email}</p>}
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div>
+                    <label className="block text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-1.5">Message</label>
+                    <textarea rows="5" placeholder="Tell me about your project, opportunity, or just say hi..."
+                      className={`resize-none ${errors.message ? errInp : inp}`}
+                      value={form.message}
+                      onChange={e=>{ setForm({...form, message:e.target.value}); setErrors({...errors, message:null}); if(status==='error') setStatus('idle'); }}/>
+                    {errors.message && <p className="text-[10px] text-red-400 mt-1 font-mono">{errors.message}</p>}
+                  </div>
+
+                  {/* Submit */}
+                  <button type="submit" disabled={status==='loading'}
+                    className="w-full py-4 bg-gradient-to-r from-cyber-teal to-cyber-purple hover:from-cyber-purple hover:to-cyber-teal text-white font-heading font-extrabold uppercase tracking-widest text-sm rounded-xl transition-all duration-500 flex items-center justify-center gap-2.5 shadow-neon-teal disabled:opacity-60 disabled:cursor-not-allowed">
+                    {status === 'loading'
+                      ? <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"/> Sending...
+                      </>
+                      : <><Icon name="send" className="w-4 h-4"/> Send Message</>
+                    }
+                  </button>
+
+                  <p className="text-center text-[10px] text-slate-600 font-mono">
+                    Powered by EmailJS · Messages go directly to piyushk4154@gmail.com
+                  </p>
+                </form>
+              )}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+/* ─────────────────────────────────────────────────────── */
+/*  8. FOOTER                                             */
+/* ─────────────────────────────────────────────────────── */
+const Footer = () => {
+  const year = new Date().getFullYear();
+  const go = (e,id) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); };
+  return (
+    <footer className="relative py-12 px-6 md:px-12 bg-obsidian border-t border-white/5 overflow-hidden">
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[450px] h-[120px] rounded-full bg-cyber-purple/5 blur-[70px] pointer-events-none"/>
+      <div className="max-w-7xl mx-auto flex flex-col items-center gap-8">
+        <button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}
+          className="p-3 border border-white/10 hover:border-cyber-teal bg-white/5 rounded-full text-slate-400 hover:text-cyber-teal transition-all shadow-lg hover:-translate-y-1">
+          <Icon name="chevron-up" className="w-5 h-5"/>
+        </button>
+
+        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+          {['home','about','skills','projects','timeline','contact'].map(l=>(
+            <a key={l} href={`#${l}`} onClick={e=>go(e,l)} className="text-xs font-mono text-slate-500 hover:text-cyber-teal uppercase tracking-widest transition-colors capitalize">{l}</a>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-5">
+          <a href="https://github.com/Piyush-dev" target="_blank" rel="noopener noreferrer" className="p-2.5 border border-white/5 hover:border-cyber-purple bg-white/2 hover:bg-cyber-purple/10 text-slate-400 hover:text-white rounded-xl transition-all hover:scale-110">
+            <GithubIcon className="w-4 h-4"/>
+          </a>
+          <a href="https://www.linkedin.com/in/piyush-kushwaha-836554373" target="_blank" rel="noopener noreferrer" className="p-2.5 border border-white/5 hover:border-cyber-teal bg-white/2 hover:bg-cyber-teal/10 text-slate-400 hover:text-white rounded-xl transition-all hover:scale-110">
+            <LinkedinIcon className="w-4 h-4"/>
+          </a>
+          <a href="mailto:piyushk4154@gmail.com" className="p-2.5 border border-white/5 hover:border-cyber-pink bg-white/2 hover:bg-cyber-pink/10 text-slate-400 hover:text-white rounded-xl transition-all hover:scale-110">
+            <Icon name="mail" className="w-4 h-4"/>
+          </a>
+        </div>
+
+        <div className="text-center font-mono text-[10px] text-slate-600 uppercase tracking-widest space-y-1">
+          <p>Designed & Built by <span className="bg-gradient-to-r from-cyber-teal to-cyber-purple bg-clip-text text-transparent font-bold">Piyush</span></p>
+          <p>&copy; {year} PIYUSH.DEV — All Rights Reserved</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+
+/* ─────────────────────────────────────────────────────── */
+/*  APP ROOT                                              */
+/* ─────────────────────────────────────────────────────── */
+const App = () => {
+  const [active, setActive] = useState('home');
+  const [dark, setDark]     = useState(true);
+
+  /* Active section observer */
+  useEffect(()=>{
+    const ids = ['home','about','skills','projects','timeline','contact'];
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(en=>{ if(en.isIntersecting) setActive(en.target.id); });
+    },{ rootMargin:'-35% 0px -40% 0px' });
+    ids.forEach(id=>{ const el=document.getElementById(id); if(el) obs.observe(el); });
+    return ()=>obs.disconnect();
+  },[]);
+
+  /* Section fade-in on scroll */
+  useEffect(()=>{
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(en=>{ en.target.classList.toggle('section-visible', en.isIntersecting); });
+    },{ threshold:0.08 });
+    document.querySelectorAll('.section-hidden').forEach(el=>obs.observe(el));
+    return ()=>obs.disconnect();
+  },[]);
+
+  /* Remove loading screen once React mounts */
+  useEffect(()=>{
+    const ls = document.getElementById('loading-screen');
+    if(ls){ ls.classList.add('fade-out'); setTimeout(()=>ls.remove(), 700); }
+  },[]);
+
+  const toggleDark = () => {
+    setDark(d=>{
+      document.documentElement.classList.toggle('light-mode', d);
+      return !d;
+    });
+  };
+
+  return (
+    <React.Fragment>
+      <Navbar active={active} dark={dark} toggleDark={toggleDark}/>
+      <main>
+        <Hero/>
+        <div className="section-hidden"><About/></div>
+        <div className="section-hidden"><Skills/></div>
+        <div className="section-hidden"><Projects/></div>
+        <div className="section-hidden"><Timeline/></div>
+        <div className="section-hidden"><Contact/></div>
+      </main>
+      <Footer/>
+    </React.Fragment>
+  );
+};
+
+/* Mount */
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore the interactive 3D developer portfolio of Piyush, a Computer Science student and aspiring Machine Learning Developer." />
+  <meta name="keywords" content="Piyush, Portfolio, Machine Learning, Python, FastAPI, 3D Portfolio, React, GSAP" />
+  <meta name="author" content="Piyush" />
+  <title>Piyush | Standalone 3D Portfolio | Machine Learning Developer</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Core Libraries CDNs -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Animation & 3D Libraries CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            obsidian: '#030303',
+            'space-black': '#080711',
+            'cyber-teal': '#06b6d4',
+            'cyber-purple': '#8b5cf6',
+            'cyber-green': '#10b981',
+            'cyber-pink': '#ec4899',
+          },
+          boxShadow: {
+            'neon-teal': '0 0 15px rgba(6, 182, 212, 0.4)',
+            'neon-purple': '0 0 15px rgba(139, 92, 246, 0.4)',
+            'neon-green': '0 0 15px rgba(16, 185, 129, 0.4)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Advanced Styling Styles -->
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #030303;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #111019;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+
+    /* Core Layouts Custom settings */
+    html, body {
+      background-color: #030303;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      cursor: none;
+      scroll-behavior: smooth;
+    }
+    @media (max-width: 768px) {
+      html, body {
+        cursor: auto;
+      }
+    }
+
+    /* Background Grids */
+    .cyber-grid {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    }
+
+    /* Glassmorphism Classes */
+    .glass-panel {
+      background: rgba(10, 10, 16, 0.6);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .glass-card {
+      background: rgba(14, 13, 22, 0.45);
+      backdrop-filter: blur(12px) saturate(160%);
+      -webkit-backdrop-filter: blur(12px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card:hover {
+      border-color: rgba(6, 182, 212, 0.35);
+      background: rgba(14, 13, 22, 0.6);
+      box-shadow: 0 0 30px rgba(6, 182, 212, 0.08);
+      transform: translateY(-4px);
+    }
+
+    /* Pulsing Light Circles */
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.05); }
+    }
+    .pulsing-glow {
+      animation: pulseGlow 6s infinite ease-in-out;
+    }
+
+    /* Smooth scroll overrides */
+    html.lenis, html.lenis body {
+      height: auto;
+    }
+    .lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+    .lenis-stopped {
+      overflow: hidden;
+    }
+
+    /* Light Theme overrides */
+    .light-theme {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .light-theme body {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .light-theme h1, 
+    .light-theme h2, 
+    .light-theme h3, 
+    .light-theme h4 {
+      color: #0f172a !important;
+    }
+    .light-theme p {
+      color: #334155 !important;
+    }
+    .light-theme span.text-slate-400,
+    .light-theme span.text-slate-300 {
+      color: #475569 !important;
+    }
+    .light-theme .glass-panel {
+      background: rgba(255, 255, 255, 0.75);
+      border-color: rgba(15, 23, 42, 0.08);
+    }
+    .light-theme .glass-card {
+      background: rgba(255, 255, 255, 0.65);
+      border-color: rgba(15, 23, 42, 0.06);
+    }
+    .light-theme .glass-card:hover {
+      background: rgba(255, 255, 255, 0.85);
+      border-color: rgba(6, 182, 212, 0.4);
+      box-shadow: 0 10px 30px rgba(6, 182, 212, 0.08);
+    }
+    .light-theme .cyber-grid {
+      background-image: 
+        linear-gradient(to right, rgba(15, 23, 42, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.02) 1px, transparent 1px);
+    }
+    .light-theme input, 
+    .light-theme textarea {
+      background-color: rgba(15, 23, 42, 0.02) !important;
+      color: #0f172a !important;
+      border-color: rgba(15, 23, 42, 0.08) !important;
+    }
+    .light-theme input:focus, 
+    .light-theme textarea:focus {
+      background-color: rgba(255, 255, 255, 0.9) !important;
+      border-color: #06b6d4 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- React root mount point -->
+  <div id="root"></div>
+
+  <!-- stand-alone HTML canvas star field background -->
+  <canvas id="particles-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10" style="mix-blend-mode: screen;"></canvas>
+
+  <!-- Particles system standalone script -->
+  <script>
+    (function() {
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let particlesArray = [];
+      const mouse = { x: null, y: null, radius: 150 };
+
+      const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+      document.addEventListener('mouseleave', () => {
+        mouse.x = null;
+        mouse.y = null;
+      });
+
+      class Particle {
+        constructor(x, y, directionX, directionY, size, color) {
+          this.x = x;
+          this.y = y;
+          this.directionX = directionX;
+          this.directionY = directionY;
+          this.size = size;
+          this.color = color;
+          this.baseSize = size;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        }
+        update() {
+          if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+          if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+          this.x += this.directionX;
+          this.y += this.directionY;
+
+          if (mouse.x !== null && mouse.y !== null) {
+            let dx = mouse.x - this.x;
+            let dy = mouse.y - this.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < mouse.radius) {
+              const force = (mouse.radius - distance) / mouse.radius;
+              this.x -= (dx / distance) * force * 2;
+              this.y -= (dy / distance) * force * 2;
+              this.size = Math.min(this.baseSize * 1.8, 3.5);
+            } else {
+              if (this.size > this.baseSize) this.size -= 0.1;
+            }
+          } else {
+            if (this.size > this.baseSize) this.size -= 0.1;
+          }
+          this.draw();
+        }
+      }
+
+      const init = () => {
+        particlesArray = [];
+        const num = Math.min(Math.floor((canvas.width * canvas.height) / 12000), 100);
+        for (let i = 0; i < num; i++) {
+          let size = Math.random() * 1.5 + 0.8;
+          let x = Math.random() * (canvas.width - size * 2) + size;
+          let y = Math.random() * (canvas.height - size * 2) + size;
+          let directionX = (Math.random() * 0.4) - 0.2;
+          let directionY = (Math.random() * 0.4) - 0.2;
+          let color = Math.random() > 0.8 ? 'rgba(6, 182, 212, 0.4)' : Math.random() > 0.7 ? 'rgba(139, 92, 246, 0.4)' : 'rgba(255,255,255,0.12)';
+          particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+        }
+      };
+
+      const connect = () => {
+        for (let a = 0; a < particlesArray.length; a++) {
+          for (let b = a + 1; b < particlesArray.length; b++) {
+            let dx = particlesArray[a].x - particlesArray[b].x;
+            let dy = particlesArray[a].y - particlesArray[b].y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 120) {
+              let opacity = 1 - (distance / 120);
+              ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.04})`;
+              ctx.lineWidth = 0.8;
+              ctx.beginPath();
+              ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+              ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+              ctx.stroke();
+            }
+          }
+        }
+      };
+
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particlesArray.length; i++) {
+          particlesArray[i].update();
+        }
+        connect();
+        requestAnimationFrame(animate);
+      };
+
+      init();
+      animate();
+    })();
+  </script>
+
+  <!-- React standalone app logic compiled via Babel -->
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // 1. Custom Lag Follower Cursor Component
+    const CustomCursor = () => {
+      const ringRef = useRef(null);
+      const dotRef = useRef(null);
+      const mousePos = useRef({ x: 0, y: 0 });
+      const ringPos = useRef({ x: 0, y: 0 });
+      const [hovered, setHovered] = useState(false);
+      const [visible, setVisible] = useState(false);
+
+      useEffect(() => {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) return;
+        setVisible(true);
+
+        const onMouseMove = (e) => {
+          mousePos.current.x = e.clientX;
+          mousePos.current.y = e.clientY;
+        };
+
+        const onMouseOver = (e) => {
+          const target = e.target;
+          const isInteractive = 
+            target.tagName === 'A' || 
+            target.tagName === 'BUTTON' || 
+            target.closest('button') || 
+            target.closest('a') || 
+            target.getAttribute('data-hover') === 'true';
+          setHovered(isInteractive);
+        };
+
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseover', onMouseOver);
+
+        let rafId;
+        const render = () => {
+          const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+          ringPos.current.x = lerp(ringPos.current.x, mousePos.current.x, 0.15);
+          ringPos.current.y = lerp(ringPos.current.y, mousePos.current.y, 0.15);
+
+          if (ringRef.current) {
+            ringRef.current.style.transform = `translate3d(${ringPos.current.x - 20}px, ${ringPos.current.y - 20}px, 0) scale(${hovered ? 1.6 : 1})`;
+            ringRef.current.style.borderColor = hovered ? '#8b5cf6' : '#06b6d4';
+            ringRef.current.style.background = hovered ? 'rgba(139, 92, 246, 0.1)' : 'transparent';
+          }
+          if (dotRef.current) {
+            dotRef.current.style.transform = `translate3d(${mousePos.current.x - 4}px, ${mousePos.current.y - 4}px, 0)`;
+            dotRef.current.style.backgroundColor = hovered ? '#8b5cf6' : '#06b6d4';
+          }
+          rafId = requestAnimationFrame(render);
+        };
+        render();
+
+        return () => {
+          window.removeEventListener('mousemove', onMouseMove);
+          window.removeEventListener('mouseover', onMouseOver);
+          cancelAnimationFrame(rafId);
+        };
+      }, [hovered]);
+
+      if (!visible) return null;
+      return (
+        <React.Fragment>
+          <div ref={ringRef} className="fixed top-0 left-0 w-10 h-10 border border-cyber-teal rounded-full pointer-events-none z-50 transition-all duration-300 ease-out shadow-[0_0_10px_rgba(6,182,212,0.1)]" style={{ transform: 'translate3d(-100px, -100px, 0)' }} />
+          <div ref={dotRef} className="fixed top-0 left-0 w-2 h-2 bg-cyber-teal rounded-full pointer-events-none z-50 transition-colors duration-200" style={{ transform: 'translate3d(-100px, -100px, 0)' }} />
+        </React.Fragment>
+      );
+    };
+
+    // 2. Navigation Header Component
+    const Navbar = ({ activeSection, isDarkMode, toggleTheme }) => {
+      const [isOpen, setIsOpen] = useState(false);
+      const [scrolled, setScrolled] = useState(false);
+
+      const navItems = [
+        { name: 'Home', href: '#home' },
+        { name: 'About', href: '#about' },
+        { name: 'Skills', href: '#skills' },
+        { name: 'Projects', href: '#projects' },
+        { name: 'Timeline', href: '#timeline' },
+        { name: 'Contact', href: '#contact' },
+      ];
+
+      useEffect(() => {
+        const handleScroll = () => {
+          setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+
+      const handleNavClick = (e, href) => {
+        e.preventDefault();
+        setIsOpen(false);
+        const targetElement = document.querySelector(href);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
+
+      return (
+        <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-500 ${scrolled ? 'py-4 bg-obsidian/75 backdrop-blur-md border-b border-white/5' : 'py-6 bg-transparent border-transparent'}`}>
+          <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
+            <a href="#home" onClick={(e) => handleNavClick(e, '#home')} className="flex items-center space-x-2 text-white font-heading font-extrabold text-xl tracking-wider group">
+              <i data-lucide="terminal" className="w-5 h-5 text-cyber-teal group-hover:text-cyber-purple transition-colors duration-300"></i>
+              <span className="bg-gradient-to-r from-cyber-teal to-cyber-purple bg-clip-text text-transparent">PIYUSH.DEV</span>
+            </a>
+
+            {/* Desktop items */}
+            <div className="hidden md:flex items-center space-x-8">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.href.replace('#', '');
+                return (
+                  <a key={item.name} href={item.href} onClick={(e) => handleNavClick(e, item.href)} className={`font-medium text-sm tracking-wide transition-all duration-300 hover:text-cyber-teal relative py-2 ${isActive ? 'text-cyber-teal font-semibold' : 'text-slate-400'}`}>
+                    {item.name}
+                    <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-cyber-teal to-cyber-purple transition-transform duration-300 origin-left ${isActive ? 'scale-x-100' : 'scale-x-0'}`} />
+                  </a>
+                );
+              })}
+            </div>
+
+            {/* Controls */}
+            <div className="flex items-center space-x-4">
+              <button onClick={toggleTheme} className="p-2.5 rounded-lg glass-panel hover:border-cyber-teal text-slate-300 hover:text-cyber-teal transition-all">
+                {isDarkMode ? <i data-lucide="sun" className="w-4.5 h-4.5"></i> : <i data-lucide="moon" className="w-4.5 h-4.5"></i>}
+              </button>
+              <a href="#" className="hidden sm:flex items-center space-x-2 px-4 py-2 border border-cyber-teal/30 hover:border-cyber-teal bg-cyber-teal/5 hover:bg-cyber-teal/15 rounded-lg text-xs font-semibold tracking-wider text-cyber-teal uppercase transition-all duration-300 shadow-neon-teal">
+                <i data-lucide="download" className="w-3.5 h-3.5"></i>
+                <span>Resume</span>
+              </a>
+              <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white glass-panel">
+                {isOpen ? <i data-lucide="x" className="w-5 h-5"></i> : <i data-lucide="menu" className="w-5 h-5"></i>}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Overlay */}
+          <div className={`fixed top-[74px] left-0 w-full h-[calc(100vh-74px)] bg-obsidian/95 backdrop-blur-lg border-t border-white/5 transition-all duration-500 ease-in-out md:hidden ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6 pointer-events-none'}`}>
+            <div className="flex flex-col items-center justify-center h-full space-y-8 pb-12">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.href.replace('#', '');
+                return (
+                  <a key={item.name} href={item.href} onClick={(e) => handleNavClick(e, item.href)} className={`text-xl font-heading tracking-wide ${isActive ? 'text-cyber-teal font-bold' : 'text-slate-300'}`}>
+                    {item.name}
+                  </a>
+                );
+              })}
+              <a href="#" className="flex items-center space-x-2 px-6 py-3 border border-cyber-teal bg-cyber-teal/10 rounded-lg text-sm font-semibold tracking-wider text-cyber-teal uppercase shadow-neon-teal animate-pulse">
+                <i data-lucide="download" className="w-4.5 h-4.5"></i>
+                <span>Download Resume</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      );
+    };
+
+    // 3. 3D Hero Section Component (Hooks Native ThreeJS Canvas)
+    const Hero = () => {
+      const roles = ['Python Developer', 'Machine Learning Enthusiast', 'FastAPI Learner', 'Frontend + Backend Explorer'];
+      const [roleIndex, setRoleIndex] = useState(0);
+      const [currentText, setCurrentText] = useState('');
+      const [isDeleting, setIsDeleting] = useState(false);
+      const canvasRef = useRef(null);
+
+      // Typing loop
+      useEffect(() => {
+        let timer;
+        const currentRole = roles[roleIndex];
+        const tick = () => {
+          if (!isDeleting) {
+            setCurrentText(currentRole.substring(0, currentText.length + 1));
+            if (currentText === currentRole) {
+              timer = setTimeout(() => setIsDeleting(true), 1500);
+              return;
+            }
+          } else {
+            setCurrentText(currentRole.substring(0, currentText.length - 1));
+            if (currentText === '') {
+              setIsDeleting(false);
+              setRoleIndex((prev) => (prev + 1) % roles.length);
+              return;
+            }
+          }
+          timer = setTimeout(tick, isDeleting ? 45 : 90);
+        };
+        timer = setTimeout(tick, 90);
+        return () => clearTimeout(timer);
+      }, [currentText, isDeleting, roleIndex]);
+
+      // ThreeJS Native Morphing Blob Canvas initialisation
+      useEffect(() => {
+        if (!canvasRef.current) return;
+        const canvas = canvasRef.current;
+        const parent = canvas.parentElement;
+        
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, parent.offsetWidth / parent.offsetHeight, 0.1, 100);
+        camera.position.z = 4.5;
+
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setSize(parent.offsetWidth, parent.offsetHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+        // Geometry: Morphing cyber sphere
+        const geometry = new THREE.SphereGeometry(1.4, 64, 64);
+        
+        // ShaderMaterial for organic liquid morphing blob
+        const material = new THREE.MeshStandardMaterial({
+          color: 0x8b5cf6,
+          roughness: 0.15,
+          metalness: 0.9,
+          wireframe: false,
+        });
+
+        const sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+
+        // Orbiting cyber wireframes
+        const torusGeom = new THREE.TorusGeometry(1.8, 0.1, 16, 100);
+        const torusMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, wireframe: true });
+        const torus = new THREE.Mesh(torusGeom, torusMat);
+        scene.add(torus);
+
+        const cubeGeom = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+        const cubeMat = new THREE.MeshStandardMaterial({ color: 0x10b981, wireframe: true });
+        const cube = new THREE.Mesh(cubeGeom, cubeMat);
+        cube.position.set(2.4, 1.5, -1);
+        scene.add(cube);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x444444);
+        scene.add(ambientLight);
+
+        const purpleLight = new THREE.PointLight(0x8b5cf6, 8, 15);
+        purpleLight.position.set(-3, 3, 2);
+        scene.add(purpleLight);
+
+        const tealLight = new THREE.PointLight(0x06b6d4, 8, 15);
+        tealLight.position.set(3, -3, 2);
+        scene.add(tealLight);
+
+        const followLight = new THREE.PointLight(0xec4899, 10, 10);
+        followLight.position.set(0, 0, 3);
+        scene.add(followLight);
+
+        // Mouse interaction coordinate tracking
+        let mouseX = 0, mouseY = 0;
+        const handleMouseMove = (e) => {
+          const rect = parent.getBoundingClientRect();
+          mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+          mouseY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        };
+        parent.addEventListener('mousemove', handleMouseMove);
+
+        // Save original geometry vertices positions to morph relative to them
+        const positionAttribute = geometry.attributes.position;
+        const originalPositions = [];
+        for (let i = 0; i < positionAttribute.count; i++) {
+          originalPositions.push(
+            new THREE.Vector3(
+              positionAttribute.getX(i),
+              positionAttribute.getY(i),
+              positionAttribute.getZ(i)
+            )
+          );
+        }
+
+        // Render loop
+        let clock = new THREE.Clock();
+        let animationFrameId;
+
+        const animate = () => {
+          const time = clock.getElapsedTime();
+          
+          // Organic morph calculations by moving vertices via mathematical sine/cosine noise offsets
+          const positions = geometry.attributes.position;
+          for (let i = 0; i < originalPositions.length; i++) {
+            const vertex = originalPositions[i];
+            
+            // Generate waving noise offset
+            const waveX = Math.sin(vertex.x * 2.5 + time * 1.5) * 0.12;
+            const waveY = Math.cos(vertex.y * 2.5 + time * 1.5) * 0.12;
+            const waveZ = Math.sin(vertex.z * 2.5 + time * 1.5) * 0.12;
+            
+            positions.setXYZ(
+              i,
+              vertex.x + waveX,
+              vertex.y + waveY,
+              vertex.z + waveZ
+            );
+          }
+          geometry.attributes.position.needsUpdate = true;
+
+          // Sphere rotations
+          sphere.rotation.y = time * 0.1;
+          sphere.rotation.x = time * 0.05;
+
+          // Torus rotations
+          torus.rotation.x = time * 0.15;
+          torus.rotation.y = time * 0.25;
+
+          // Cube vertical floating & rotation
+          cube.rotation.x = time * 0.3;
+          cube.rotation.y = time * 0.15;
+          cube.position.y = 1.0 + Math.sin(time * 0.8) * 0.25;
+
+          // Follower light tracking
+          followLight.position.x = mouseX * 4;
+          followLight.position.y = mouseY * 3;
+
+          // Smooth camera perspective tilting
+          camera.position.x += (mouseX * 1.2 - camera.position.x) * 0.05;
+          camera.position.y += (mouseY * 0.8 - camera.position.y) * 0.05;
+          camera.lookAt(scene.position);
+
+          renderer.render(scene, camera);
+          animationFrameId = requestAnimationFrame(animate);
+        };
+        animate();
+
+        // Responsive Resizes
+        const handleResize = () => {
+          camera.aspect = parent.offsetWidth / parent.offsetHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(parent.offsetWidth, parent.offsetHeight);
+        };
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup
+        return () => {
+          parent.removeEventListener('mousemove', handleMouseMove);
+          window.removeEventListener('resize', handleResize);
+          cancelAnimationFrame(animationFrameId);
+        };
+      }, []);
+
+      return (
+        <section id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-20 px-6 md:px-12 bg-obsidian">
+          <div className="absolute top-1/4 left-1/4 w-[350px] md:w-[600px] h-[350px] md:h-[600px] rounded-full bg-cyber-purple/10 blur-[120px] pointer-events-none -z-10 pulsing-glow" />
+          <div className="absolute bottom-1/4 right-1/4 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full bg-cyber-teal/10 blur-[120px] pointer-events-none -z-10 pulsing-glow" />
+          <div className="absolute inset-0 cyber-grid opacity-30 pointer-events-none -z-20" />
+
+          <div className="max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center z-10">
+            <div className="lg:col-span-7 text-center lg:text-left space-y-6 flex flex-col items-center lg:items-start order-2 lg:order-1">
+              <div className="flex items-center space-x-2 px-3 py-1.5 glass-panel bg-white/5 border border-white/10 rounded-full text-xs font-semibold tracking-wider text-cyber-teal uppercase">
+                <i data-lucide="sparkles" className="w-3.5 h-3.5 animate-pulse text-cyber-teal"></i>
+                <span>Welcome to my Digital Space</span>
+              </div>
+              <div className="space-y-4">
+                <h1 className="text-4xl sm:text-5xl md:text-7xl font-heading font-extrabold tracking-tight text-white leading-tight">
+                  Hi, I am <span className="bg-gradient-to-r from-cyber-teal via-cyber-purple to-cyber-pink bg-clip-text text-transparent">Piyush</span>
+                </h1>
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-medium text-slate-300 min-h-[40px] flex items-center justify-center lg:justify-start">
+                  I build solutions as a&nbsp;
+                  <span className="text-cyber-teal font-semibold font-heading border-r-2 border-cyber-teal pr-1 animate-pulse">{currentText}</span>
+                </h2>
+              </div>
+              <p className="text-base sm:text-lg text-slate-400 max-w-lg leading-relaxed font-light">
+                A Computer Science student designing high-performance machine learning models, modern backend architectures, and immersive interactive interfaces.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
+                <button onClick={() => document.querySelector('#projects').scrollIntoView({ behavior: 'smooth' })} className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-cyber-teal to-cyber-purple text-white font-semibold rounded-lg shadow-neon-teal hover:scale-105 transition-all">Explore Projects</button>
+                <button onClick={() => document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' })} className="w-full sm:w-auto px-8 py-3.5 border border-white/10 hover:border-cyber-teal bg-white/5 hover:bg-cyber-teal/5 text-slate-300 hover:text-cyber-teal font-semibold rounded-lg transition-all backdrop-blur-md">Contact Me</button>
+              </div>
+            </div>
+
+            {/* Blob canvas container */}
+            <div className="lg:col-span-5 h-[350px] sm:h-[450px] lg:h-[600px] w-full flex items-center justify-center order-1 lg:order-2">
+              <div className="w-full h-full relative cursor-grab active:cursor-grabbing">
+                <canvas ref={canvasRef} className="w-full h-full block"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // 4. About Me Component (Hooks Native Spinning Wireframe Cube)
+    const About = () => {
+      const canvasRef = useRef(null);
+
+      // Sphere-Cube scene initialization
+      useEffect(() => {
+        if (!canvasRef.current) return;
+        const canvas = canvasRef.current;
+        const parent = canvas.parentElement;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, parent.offsetWidth / parent.offsetHeight, 0.1, 100);
+        camera.position.z = 4.2;
+
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setSize(parent.offsetWidth, parent.offsetHeight);
+
+        // Core Glowing sphere
+        const sphereGeom = new THREE.SphereGeometry(0.8, 32, 32);
+        const sphereMat = new THREE.MeshStandardMaterial({ color: 0x8b5cf6, emissive: 0x8b5cf6, emissiveIntensity: 1.0 });
+        const sphere = new THREE.Mesh(sphereGeom, sphereMat);
+        scene.add(sphere);
+
+        // Outer Wireframe Cube
+        const cubeGeom = new THREE.BoxGeometry(2.0, 2.0, 2.0);
+        const cubeMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, wireframe: true, roughness: 0.1 });
+        const cube = new THREE.Mesh(cubeGeom, cubeMat);
+        scene.add(cube);
+
+        // Ambient & lights
+        const ambientLight = new THREE.AmbientLight(0x555555);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0x10b981, 10, 10);
+        pointLight.position.set(2, 2, 2);
+        scene.add(pointLight);
+
+        let clock = new THREE.Clock();
+        let animationFrameId;
+
+        const animate = () => {
+          const elapsed = clock.getElapsedTime();
+          cube.rotation.x = elapsed * 0.35;
+          cube.rotation.y = elapsed * 0.5;
+          cube.position.y = Math.sin(elapsed * 1.5) * 0.15;
+          sphere.position.y = Math.sin(elapsed * 1.5) * 0.15;
+          renderer.render(scene, camera);
+          animationFrameId = requestAnimationFrame(animate);
+        };
+        animate();
+
+        const handleResize = () => {
+          camera.aspect = parent.offsetWidth / parent.offsetHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(parent.offsetWidth, parent.offsetHeight);
+        };
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+          window.removeEventListener('resize', handleResize);
+          cancelAnimationFrame(animationFrameId);
+        };
+      }, []);
+
+      const handleCardMouseMove = (e) => {
+        const card = e.currentTarget;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        const tiltX = (y / (rect.height / 2)) * -12;
+        const tiltY = (x / (rect.width / 2)) * 12;
+
+        card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`;
+        const radialHighlight = card.querySelector('.highlight');
+        if (radialHighlight) {
+          radialHighlight.style.background = `radial-gradient(300px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(6, 182, 212, 0.15), transparent 80%)`;
+        }
+      };
+
+      const handleCardMouseLeave = (e) => {
+        const card = e.currentTarget;
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+        const radialHighlight = card.querySelector('.highlight');
+        if (radialHighlight) radialHighlight.style.background = 'transparent';
+      };
+
+      return (
+        <section id="about" className="relative w-full min-h-screen flex items-center justify-center py-24 px-6 md:px-12 bg-obsidian overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-cyber-purple/5 blur-[120px] pointer-events-none -z-10 pulsing-glow" />
+          <div className="absolute inset-0 cyber-grid opacity-15 pointer-events-none -z-20" />
+
+          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            <div className="lg:col-span-7 space-y-12">
+              <div className="space-y-4">
+                <span className="text-xs uppercase font-extrabold tracking-widest text-cyber-teal border-l-2 border-cyber-teal pl-3">Who I Am</span>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white tracking-tight leading-tight">Crafting Intelligent Solutions</h2>
+              </div>
+              <p className="text-lg sm:text-xl text-slate-300 leading-relaxed font-light">
+                I am a passionate Computer Science student focused on <span className="text-cyber-teal font-medium">Python Development</span>, <span className="text-cyber-purple font-medium">Machine Learning</span>, <span className="text-cyber-green font-medium">Data Analysis</span>, and <span className="text-cyber-teal font-medium">Backend Development</span>. I enjoy building real-world projects and learning modern technologies.
+              </p>
+
+              {/* Holographic Cards grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div onMouseMove={handleCardMouseMove} onMouseLeave={handleCardMouseLeave} className="glass-card rounded-2xl p-6 relative overflow-hidden transition-all duration-300 ease-out cursor-pointer" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="highlight absolute inset-0 pointer-events-none transition-all duration-200" />
+                  <div className="p-3 bg-cyber-teal/5 border border-cyber-teal/20 rounded-xl w-fit mb-4">
+                    <i data-lucide="brain" className="w-6 h-6 text-cyber-teal"></i>
+                  </div>
+                  <h3 className="text-lg font-heading font-bold text-white mb-2">Machine Learning</h3>
+                  <p className="text-sm text-slate-400 font-light leading-relaxed">Supervised models, clustering architectures, data pipelines, predictive models.</p>
+                </div>
+
+                <div onMouseMove={handleCardMouseMove} onMouseLeave={handleCardMouseLeave} className="glass-card rounded-2xl p-6 relative overflow-hidden transition-all duration-300 ease-out cursor-pointer" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="highlight absolute inset-0 pointer-events-none transition-all duration-200" />
+                  <div className="p-3 bg-cyber-purple/5 border border-cyber-purple/20 rounded-xl w-fit mb-4">
+                    <i data-lucide="terminal" className="w-6 h-6 text-cyber-purple"></i>
+                  </div>
+                  <h3 className="text-lg font-heading font-bold text-white mb-2">Backend Dev</h3>
+                  <p className="text-sm text-slate-400 font-light leading-relaxed">FastAPI endpoints, robust database pipelines, Python scripts, scalable servers.</p>
+                </div>
+
+                <div onMouseMove={handleCardMouseMove} onMouseLeave={handleCardMouseLeave} className="glass-card rounded-2xl p-6 relative overflow-hidden transition-all duration-300 ease-out cursor-pointer" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="highlight absolute inset-0 pointer-events-none transition-all duration-200" />
+                  <div className="p-3 bg-cyber-green/5 border border-cyber-green/20 rounded-xl w-fit mb-4">
+                    <i data-lucide="database" className="w-6 h-6 text-cyber-green"></i>
+                  </div>
+                  <h3 className="text-lg font-heading font-bold text-white mb-2">Data Science</h3>
+                  <p className="text-sm text-slate-400 font-light leading-relaxed">High-performance insights using Pandas, NumPy, Matplotlib data visualization grids.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Spin cube canvas column */}
+            <div className="lg:col-span-5 h-[350px] md:h-[450px] lg:h-[500px] w-full flex items-center justify-center relative">
+              <div className="absolute inset-4 rounded-3xl bg-gradient-to-tr from-cyber-teal/5 via-transparent to-cyber-purple/5 border border-white/5 backdrop-blur-[2px] -z-10 shadow-[0_0_50px_rgba(0,0,0,0.5)]" />
+              <div className="w-full h-full relative cursor-pointer">
+                <canvas ref={canvasRef} className="w-full h-full block"></canvas>
+              </div>
+              <div className="absolute bottom-6 flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-slate-500 pointer-events-none">
+                <i data-lucide="eye" className="w-4 h-4 text-cyber-teal"></i>
+                <span>Interactive 3D Grid</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // 5. Skills Grid Component
+    const Skills = () => {
+      const skillsData = [
+        { name: 'Python', level: 95, color: 'text-cyber-teal', border: 'hover:border-cyber-teal/40', glow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', icon: 'code-2', desc: 'Core language, object-oriented systems & scripting.' },
+        { name: 'Pandas', level: 90, color: 'text-cyber-purple', border: 'hover:border-cyber-purple/40', glow: 'shadow-[0_0_15px_rgba(139,92,246,0.15)]', icon: 'binary', desc: 'Large dataset wrangling, clean-ups, aggregations.' },
+        { name: 'NumPy', level: 90, color: 'text-cyber-green', border: 'hover:border-cyber-green/40', glow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', icon: 'blocks', desc: 'Multi-dimensional arrays, vector computations, operations.' },
+        { name: 'Matplotlib', level: 85, color: 'text-cyber-green', border: 'hover:border-cyber-green/40', glow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', icon: 'bar-chart-3', desc: 'Visual graphics, subplots, custom scientific chart designs.' },
+        { name: 'Machine Learning', level: 90, color: 'text-cyber-purple', border: 'hover:border-cyber-purple/40', glow: 'shadow-[0_0_15px_rgba(139,92,246,0.15)]', icon: 'network', desc: 'Supervised classification, regression, clustering models.' },
+        { name: 'FastAPI', level: 80, color: 'text-cyber-teal', border: 'hover:border-cyber-teal/40', glow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', icon: 'server', desc: 'Ultra-fast asynchronous REST APIs, Pydantic validations.' },
+        { name: 'HTML', level: 95, color: 'text-cyber-pink', border: 'hover:border-cyber-pink/40', glow: 'shadow-[0_0_15px_rgba(236,72,153,0.15)]', icon: 'globe-2', desc: 'Semantic layouts, advanced forms, accessibility.' },
+        { name: 'CSS', level: 90, color: 'text-cyber-pink', border: 'hover:border-cyber-pink/40', glow: 'shadow-[0_0_15px_rgba(236,72,153,0.15)]', icon: 'layers', desc: 'Tailwind styling, layouts, custom transitions & effects.' },
+        { name: 'JavaScript', level: 85, color: 'text-cyber-pink', border: 'hover:border-cyber-pink/40', glow: 'shadow-[0_0_15px_rgba(236,72,153,0.15)]', icon: 'blocks', desc: 'ES6+ core structures, async integrations, browser events.' },
+        { name: 'Data Analysis', level: 90, color: 'text-cyber-green', border: 'hover:border-cyber-green/40', glow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', icon: 'bar-chart-3', desc: 'Exploratory data analysis (EDA), pattern finds, pipelines.' },
+        { name: 'Git & GitHub', level: 85, color: 'text-cyber-teal', border: 'hover:border-cyber-teal/40', glow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', icon: 'git-branch', desc: 'Subversion operations, branch management, collaborative PRs.' }
+      ];
+
+      const handleTileMouseMove = (e) => {
+        const tile = e.currentTarget;
+        const rect = tile.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        tile.style.setProperty('--x', `${x}px`);
+        tile.style.setProperty('--y', `${y}px`);
+        const xAngle = (y - rect.height / 2) / (rect.height / 2) * -8;
+        const yAngle = (x - rect.width / 2) / (rect.width / 2) * 8;
+        tile.style.transform = `perspective(800px) rotateX(${xAngle}deg) rotateY(${yAngle}deg) translateY(-2px)`;
+      };
+
+      const handleTileMouseLeave = (e) => {
+        e.currentTarget.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0)';
+      };
+
+      return (
+        <section id="skills" className="relative w-full min-h-screen py-24 px-6 md:px-12 bg-obsidian overflow-hidden">
+          <div className="absolute top-1/4 right-0 w-[450px] h-[450px] rounded-full bg-cyber-teal/5 blur-[100px] pointer-events-none -z-10 pulsing-glow" />
+          <div className="absolute bottom-1/4 left-0 w-[450px] h-[450px] rounded-full bg-cyber-purple/5 blur-[100px] pointer-events-none -z-10 pulsing-glow" />
+
+          <div className="max-w-7xl mx-auto w-full space-y-16">
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <span className="text-xs uppercase font-extrabold tracking-widest text-cyber-purple border-l-2 border-cyber-purple px-3 inline-block">My Tech Stack</span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold tracking-tight text-white leading-tight">Skills & Computational Expertise</h2>
+              <p className="text-sm sm:text-base text-slate-400 font-light">A diverse toolkit specialized in building intelligent predictive systems, robust web layers, and dynamic modern user interfaces.</p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {skillsData.map((skill, index) => (
+                <div key={skill.name} onMouseMove={handleTileMouseMove} onMouseLeave={handleTileMouseLeave} className={`skill-tile glass-card p-6 rounded-2xl flex flex-col justify-between border border-white/5 relative overflow-hidden transition-all duration-300 group ${skill.border} ${skill.glow}`} style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="absolute inset-0 radial-glow-hover pointer-events-none transition-all duration-200" />
+                  
+                  <div className="space-y-4 relative z-10" style={{ transform: 'translateZ(20px)' }}>
+                    <div className="flex items-center justify-between">
+                      <div className={`p-3 bg-white/5 rounded-xl border border-white/10 ${skill.color} transition-colors duration-300 group-hover:bg-white/10`}>
+                        <i data-lucide={skill.icon} className="w-5.5 h-5.5"></i>
+                      </div>
+                      <span className={`text-xs font-mono font-bold ${skill.color}`}>{skill.level}%</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-heading font-extrabold text-white group-hover:text-cyber-teal transition-colors duration-300">{skill.name}</h3>
+                      <p className="text-xs text-slate-400 leading-relaxed font-light">{skill.desc}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 space-y-1.5 relative z-10" style={{ transform: 'translateZ(10px)' }}>
+                    <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                      <div className={`h-full rounded-full bg-gradient-to-r ${skill.color.includes('teal') ? 'from-cyber-teal to-cyber-purple' : skill.color.includes('purple') ? 'from-cyber-purple to-cyber-pink' : skill.color.includes('green') ? 'from-cyber-green to-cyber-teal' : 'from-cyber-pink to-cyber-purple'}`} style={{ width: `${skill.level}%` }} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // 6. Horizontal Projects Showcase Component (Native Sliding via standard CSS scroll-snap/Flex)
+    const Projects = () => {
+      const projects = [
+        {
+          id: 'academics',
+          title: 'Lets Simplify Academics',
+          subtitle: 'Academic Productivity Platform',
+          color: 'from-cyber-teal to-cyber-purple',
+          description: 'A student-focused platform designed to streamline classroom tasks, build study structures, and enhance academic productivity. Features custom schedules, task trackers, and clean workspaces.',
+          stack: ['React', 'Tailwind CSS', 'Framer Motion', 'Node.js'],
+          mockup: (
+            <div className="w-full h-full bg-slate-950 p-4 rounded-xl flex flex-col space-y-3 border border-white/5 font-sans relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-cyber-teal/10 blur-xl rounded-full" />
+              <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                <div className="flex items-center space-x-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                  <span className="text-[10px] text-slate-500 font-mono pl-2">dashboard_v2.json</span>
+                </div>
+                <span className="text-[9px] bg-cyber-teal/10 text-cyber-teal px-1.5 py-0.5 rounded border border-cyber-teal/20 font-mono">Simplifier Active</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2 h-full">
+                <div className="col-span-2 bg-white/2 rounded-lg p-2.5 border border-white/5 flex flex-col justify-between">
+                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Active Workspace</span>
+                  <div className="space-y-1">
+                    <div className="h-2 w-full bg-cyber-teal/30 rounded" />
+                    <div className="h-2 w-4/5 bg-white/5 rounded" />
+                    <div className="h-2 w-2/3 bg-white/5 rounded" />
+                  </div>
+                  <span className="text-[10px] text-cyber-teal font-semibold font-mono">Progress: 88%</span>
+                </div>
+                <div className="bg-white/2 rounded-lg p-2.5 border border-white/5 flex flex-col justify-between items-center text-center">
+                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Sprints</span>
+                  <div className="w-8 h-8 rounded-full border-2 border-cyber-purple flex items-center justify-center text-[10px] font-bold text-white font-mono shadow-[0_0_10px_rgba(139,92,246,0.2)]">6/7</div>
+                </div>
+              </div>
+            </div>
+          )
+        },
+        {
+          id: 'tealogy',
+          title: 'Tealogy Cafe Website',
+          subtitle: 'Premium Food & Beverage UI',
+          color: 'from-cyber-purple to-cyber-pink',
+          description: 'An elegant, responsive cafe website crafted with stunning aesthetics, smooth product showcases, and interactive menus. Reimagines food UI and client branding with modern layouts.',
+          stack: ['HTML', 'CSS', 'JavaScript', 'GSAP'],
+          mockup: (
+            <div className="w-full h-full bg-neutral-950 p-4 rounded-xl flex flex-col space-y-3 border border-white/5 font-sans relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-cyber-purple/10 blur-xl rounded-full" />
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-serif font-extrabold italic text-white tracking-widest">TEALOGY</span>
+                <div className="flex space-x-1.5"><span className="w-1.5 h-1.5 rounded-full bg-white/20" /><span className="w-1.5 h-1.5 rounded-full bg-white/20" /></div>
+              </div>
+              <div className="relative h-20 bg-gradient-to-tr from-cyber-purple/15 to-cyber-pink/5 rounded-lg border border-white/5 overflow-hidden flex items-center justify-between p-3">
+                <div className="space-y-1">
+                  <span className="text-[7px] text-slate-400 uppercase tracking-widest font-mono">Exclusive Brew</span>
+                  <h4 className="text-[10px] font-serif font-bold text-white leading-tight">Dark Hazelnut Teacino</h4>
+                  <span className="text-[9px] text-cyber-pink font-semibold font-mono">$4.99</span>
+                </div>
+                <div className="w-8 h-10 bg-gradient-to-t from-cyber-purple to-cyber-pink rounded" />
+              </div>
+            </div>
+          )
+        },
+        {
+          id: 'ml-projects',
+          title: 'Machine Learning Suite',
+          subtitle: 'Data Modeling & Analytics Dashboard',
+          color: 'from-cyber-purple to-cyber-green',
+          description: 'High-performance machine learning dashboards built to evaluate supervised learning models, generate exploratory graphs, and render predictive computations with NumPy and Pandas.',
+          stack: ['Python', 'Pandas', 'NumPy', 'Matplotlib', 'Scikit-Learn'],
+          mockup: (
+            <div className="w-full h-full bg-slate-950 p-4 rounded-xl flex flex-col space-y-3 border border-white/5 font-sans relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-cyber-green/10 blur-xl rounded-full" />
+              <div className="flex items-center justify-between pb-1 border-b border-white/5">
+                <span className="text-[8px] text-slate-400 font-mono">model_evaluator.py</span>
+                <span className="text-[8px] text-cyber-green font-bold font-mono">Accuracy: 96.4%</span>
+              </div>
+              <div className="h-20 bg-white/2 rounded-lg border border-white/5 p-2 flex flex-col justify-between relative">
+                <span className="text-[7px] text-slate-500 font-mono">Decision Boundary Margins</span>
+                <div className="w-full h-12 flex items-end justify-between px-2 pb-1 relative">
+                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 50">
+                    <path d="M 10 40 Q 50 25 90 10" fill="none" stroke="#10b981" strokeWidth="1.5" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          )
+        }
+      ];
+
+      const handleMouseMove = (e) => {
+        const card = e.currentTarget;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        const tiltX = (y / (rect.height / 2)) * -6;
+        const tiltY = (x / (rect.width / 2)) * 6;
+        card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.01)`;
+      };
+
+      const handleMouseLeave = (e) => {
+        e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+      };
+
+      return (
+        <section id="projects" className="relative w-full bg-obsidian py-24 z-10 overflow-hidden">
+          <div className="absolute top-1/2 left-0 w-[550px] h-[550px] rounded-full bg-cyber-purple/5 blur-[120px] pointer-events-none -z-10 pulsing-glow" />
+          <div className="absolute top-1/3 right-0 w-[500px] h-[500px] rounded-full bg-cyber-teal/5 blur-[120px] pointer-events-none -z-10 pulsing-glow" />
+
+          <div className="max-w-7xl mx-auto px-6 md:px-12 w-full mb-12">
+            <span className="text-xs uppercase font-extrabold tracking-widest text-cyber-teal border-l-2 border-cyber-teal pl-3">Portfolio Showcase</span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold tracking-tight text-white leading-tight mt-2">Immersive Project Gallery</h2>
+          </div>
+
+          {/* Cards container - Snap scrolls nicely on all browsers */}
+          <div className="flex flex-col lg:flex-row space-y-12 lg:space-y-0 lg:space-x-12 px-6 md:px-12 lg:px-24 overflow-x-auto no-scrollbar py-6">
+            {projects.map((project) => (
+              <div key={project.id} className="w-full lg:w-[900px] flex-shrink-0 flex items-center justify-center snap-center">
+                <div onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className="w-full bg-white/2 hover:bg-white/4 border border-white/5 hover:border-white/10 backdrop-blur-md rounded-3xl p-8 lg:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 transition-all duration-300 relative shadow-2xl overflow-hidden" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className={`absolute top-0 right-0 w-[300px] h-[300px] bg-gradient-to-tr ${project.color} opacity-[0.03] blur-3xl pointer-events-none`} />
+
+                  {/* Left Mockup column */}
+                  <div className="lg:col-span-5 flex flex-col justify-center items-center" style={{ transform: 'translateZ(30px)' }}>
+                    <div className="w-full aspect-[4/3] rounded-2xl p-1 bg-gradient-to-tr from-white/10 via-transparent to-white/10 border border-white/10 shadow-2xl">
+                      {project.mockup}
+                    </div>
+                  </div>
+
+                  {/* Right Description column */}
+                  <div className="lg:col-span-7 flex flex-col justify-between space-y-6" style={{ transform: 'translateZ(10px)' }}>
+                    <div className="space-y-4">
+                      <span className="text-xs font-mono font-semibold text-slate-400 uppercase tracking-widest">{project.subtitle}</span>
+                      <h3 className="text-2xl sm:text-3xl font-heading font-extrabold text-white leading-tight">{project.title}</h3>
+                      <p className="text-sm text-slate-400 leading-relaxed font-light">{project.description}</p>
+                    </div>
+
+                    <div className="space-y-4 pt-4 border-t border-white/5">
+                      <div className="flex flex-wrap gap-2">
+                        {project.stack.map((tech) => (
+                          <span key={tech} className="text-[10px] sm:text-xs font-mono px-3 py-1 bg-white/5 text-slate-300 border border-white/5 rounded-full">{tech}</span>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center space-x-4 pt-2">
+                        <a href="#" className="flex items-center space-x-2 px-5 py-2.5 border border-white/10 hover:border-cyber-purple bg-white/5 hover:bg-cyber-purple/5 text-slate-300 hover:text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-all">
+                          <svg className="w-4 h-4 text-cyber-purple fill-current" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                          </svg>
+                          <span>Code</span>
+                        </a>
+                        <a href="#" className="flex items-center space-x-2 px-5 py-2.5 border border-cyber-teal bg-cyber-teal/5 hover:bg-cyber-teal/15 text-cyber-teal text-xs font-bold uppercase tracking-wider rounded-lg shadow-neon-teal transition-all">
+                          <i data-lucide="external-link" className="w-4 h-4"></i>
+                          <span>Live Demo</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    };
+
+    // 7. Learning Journey Timeline Component
+    const Timeline = () => {
+      const milestones = [
+        { step: 'Step 01', title: 'Started Python', subtitle: 'Fundamentals & Scripting', icon: 'code', color: 'border-cyber-teal/30 hover:border-cyber-teal', glow: 'shadow-[0_0_15px_rgba(6,182,212,0.1)]', textColor: 'text-cyber-teal', desc: 'Dived into the universe of Computer Science. Mastered Python fundamentals, variables, loops, custom function modularity, and object-oriented concepts.', tags: ['Python', 'OOP', 'Data Types'] },
+        { step: 'Step 02', title: 'Learned Pandas & NumPy', subtitle: 'Computational Foundations', icon: 'database', color: 'border-cyber-purple/30 hover:border-cyber-purple', glow: 'shadow-[0_0_15px_rgba(139,92,246,0.1)]', textColor: 'text-cyber-purple', desc: 'Mastered mathematical computing and matrix operations using NumPy. Discovered vector computations, tabular analysis, and high-performance cleanups with Pandas.', tags: ['Pandas', 'NumPy', 'Computations'] },
+        { step: 'Step 03', title: 'Data Visualization', subtitle: 'Visual Analytics & Graph Modeling', icon: 'eye', color: 'border-cyber-green/30 hover:border-cyber-green', glow: 'shadow-[0_0_15px_rgba(16,185,129,0.1)]', textColor: 'text-cyber-green', desc: 'Dived deep into plotting and analytical visualizations using Matplotlib and Seaborn. Crafted custom scatter maps and decision boundary charts.', tags: ['Matplotlib', 'Seaborn', 'Analytics'] },
+        { step: 'Step 04', title: 'Machine Learning', subtitle: 'Predictive Modeling & AI', icon: 'brain', color: 'border-cyber-purple/30 hover:border-cyber-purple', glow: 'shadow-[0_0_15px_rgba(139,92,246,0.1)]', textColor: 'text-cyber-purple', desc: 'Implemented regression, SVM classifiers, random forest trees, and supervised models using Scikit-Learn. Explored data pipelines.', tags: ['Scikit-Learn', 'Supervised', 'Clustering'] },
+        { step: 'Step 05', title: 'FastAPI Development', subtitle: 'Modern Backend APIs', icon: 'terminal', color: 'border-cyber-teal/30 hover:border-cyber-teal', glow: 'shadow-[0_0_15px_rgba(6,182,212,0.1)]', textColor: 'text-cyber-teal', desc: 'Ventured into high-performance web development. Designed asynchronous REST APIs with FastAPI, input validation with Pydantic, and fast database endpoints.', tags: ['FastAPI', 'REST APIs', 'Async'] },
+        { step: 'Step 06', title: 'DSA Journey', subtitle: 'Structures & Algorithms', icon: 'shield-alert', color: 'border-cyber-pink/30 hover:border-cyber-pink', glow: 'shadow-[0_0_15px_rgba(236,72,153,0.1)]', textColor: 'text-cyber-pink', desc: 'Dedicated rigorous practice to mastering complex data structures and algorithmic designs, binary trees, time complexities.', tags: ['DSA', 'Algorithms', 'Complexities'] }
+      ];
+
+      return (
+        <section id="timeline" className="relative w-full py-24 px-6 md:px-12 bg-obsidian overflow-hidden">
+          <div className="absolute top-1/3 left-0 w-[500px] h-[500px] rounded-full bg-cyber-teal/5 blur-[120px] pointer-events-none -z-10 pulsing-glow" />
+          <div className="absolute bottom-1/3 right-0 w-[500px] h-[500px] rounded-full bg-cyber-purple/5 blur-[120px] pointer-events-none -z-10 pulsing-glow" />
+
+          <div className="max-w-7xl mx-auto w-full space-y-16">
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <span className="text-xs uppercase font-extrabold tracking-widest text-cyber-teal border-l-2 border-cyber-teal px-3 inline-block">My Journey</span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold tracking-tight text-white leading-tight">Learning Timeline</h2>
+              <p className="text-sm sm:text-base text-slate-400 font-light">A chronological mapping of my growth, core milestones, and technical acquisitions as a Computer Science explorer.</p>
+            </div>
+
+            <div className="relative max-w-5xl mx-auto py-12">
+              <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-[2px] bg-white/5 -translate-x-[1px] pointer-events-none" />
+              <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-[2px] bg-cyber-teal -translate-x-[1px] origin-top pointer-events-none shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+
+              <div className="space-y-16">
+                {milestones.map((item, index) => {
+                  const isEven = index % 2 === 0;
+                  return (
+                    <div key={item.step} className={`flex flex-col lg:flex-row relative items-start lg:items-center ${isEven ? 'lg:flex-row-reverse' : ''}`}>
+                      <div className="absolute left-6 lg:left-1/2 w-6 h-6 -translate-x-3 rounded-full bg-slate-950 border-2 border-white/10 z-20 flex items-center justify-center">
+                        <div className={`w-2.5 h-2.5 rounded-full ${index === 0 ? 'bg-cyber-teal' : index % 2 === 1 ? 'bg-cyber-purple' : 'bg-cyber-green'}`} />
+                      </div>
+                      <div className="hidden lg:block w-1/2 px-12" />
+                      
+                      <div className="w-full lg:w-1/2 pl-12 lg:pl-0 lg:px-12 z-10">
+                        <div className={`glass-card p-6 md:p-8 rounded-2xl border ${item.color} ${item.glow} group cursor-pointer relative`}>
+                          <span className={`absolute top-4 right-4 text-xs font-mono font-bold ${item.textColor}`}>{item.step}</span>
+                          <div className="flex items-center space-x-3 mb-4">
+                            <div className="p-2.5 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 transition-colors">
+                              <i data-lucide={item.icon} className={`w-5 h-5 ${item.textColor}`}></i>
+                            </div>
+                            <div>
+                              <h3 className="text-lg md:text-xl font-heading font-extrabold text-white group-hover:text-cyber-teal transition-colors duration-300">{item.title}</h3>
+                              <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">{item.subtitle}</span>
+                            </div>
+                          </div>
+                          <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-light mb-6">{item.desc}</p>
+                          
+                          <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
+                            {item.tags.map((t) => (
+                              <span key={t} className="text-[10px] font-mono px-2.5 py-0.5 bg-white/5 text-slate-300 border border-white/5 rounded-full">{t}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // 8. Futuristic Contact Section
+    const Contact = () => {
+      const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+      const [status, setStatus] = useState('idle');
+      const [errors, setErrors] = useState({});
+
+      const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+        if (errors[name]) setErrors({ ...errors, [name]: null });
+      };
+
+      const validateForm = () => {
+        let tempErrors = {};
+        if (!formData.name.trim()) tempErrors.name = 'Name is required';
+        if (!formData.email.trim()) {
+          tempErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+          tempErrors.email = 'Email is invalid';
+        }
+        if (!formData.message.trim()) tempErrors.message = 'Message is required';
+        setErrors(tempErrors);
+        return Object.keys(tempErrors).length === 0;
+      };
+
+      const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
+        setStatus('loading');
+        
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        setStatus('success');
+
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#06b6d4', '#8b5cf6', '#10b981', '#ec4899']
+        });
+      };
+
+      return (
+        <section id="contact" className="relative w-full min-h-screen py-24 px-6 md:px-12 bg-obsidian overflow-hidden flex items-center justify-center">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-cyber-teal/5 blur-[140px] pointer-events-none -z-10 pulsing-glow" />
+          <div className="absolute inset-0 cyber-grid opacity-20 pointer-events-none -z-20" />
+
+          <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 z-10">
+            <div className="lg:col-span-5 flex flex-col justify-center space-y-8">
+              <div className="space-y-4">
+                <span className="text-xs uppercase font-extrabold tracking-widest text-cyber-purple border-l-2 border-cyber-purple pl-3">Get in Touch</span>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold tracking-tight text-white leading-tight">Let's Connect</h2>
+                <p className="text-sm sm:text-base text-slate-400 font-light leading-relaxed">
+                  Have an interesting project, ML pipeline to build, or a coding opportunity? Drop me a message, let's craft something next-generation together.
+                </p>
+              </div>
+
+              <div className="space-y-4 pt-4">
+                <a href="mailto:yourmail@example.com" className="flex items-center space-x-4 p-4 glass-card hover:border-cyber-teal rounded-2xl group transition-all duration-300">
+                  <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-cyber-teal/10 transition-all">
+                    <i data-lucide="mail" className="w-5 h-5 text-cyber-teal"></i>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Email Coordinates</span>
+                    <span className="text-sm text-slate-300 group-hover:text-white font-mono">yourmail@example.com</span>
+                  </div>
+                </a>
+
+                <a href="tel:+91XXXXXXXXXX" className="flex items-center space-x-4 p-4 glass-card hover:border-cyber-purple rounded-2xl group transition-all duration-300">
+                  <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-cyber-purple/10 transition-all">
+                    <i data-lucide="phone" className="w-5 h-5 text-cyber-purple"></i>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Direct Line</span>
+                    <span className="text-sm text-slate-300 group-hover:text-white font-mono">+91 XXXXX XXXXX</span>
+                  </div>
+                </a>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <a href="#" className="flex items-center space-x-3 p-3.5 glass-card hover:border-cyber-green rounded-2xl group">
+                    <div className="p-2.5 bg-white/5 rounded-lg border border-white/10 group-hover:bg-cyber-green/10 transition-all">
+                      <svg className="w-4.5 h-4.5 text-cyber-green fill-current" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">GitHub</span>
+                      <span className="text-xs text-slate-300 font-mono">Piyush-dev</span>
+                    </div>
+                  </a>
+
+                  <a href="#" className="flex items-center space-x-3 p-3.5 glass-card hover:border-cyber-pink rounded-2xl group">
+                    <div className="p-2.5 bg-white/5 rounded-lg border border-white/10 group-hover:bg-cyber-pink/10 transition-all">
+                      <svg className="w-4.5 h-4.5 text-cyber-pink fill-current" viewBox="0 0 24 24">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">LinkedIn</span>
+                      <span className="text-xs text-slate-300 font-mono">piyush-ml</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7">
+              <div className="glass-panel p-8 md:p-10 rounded-3xl border border-white/5 relative overflow-hidden shadow-2xl">
+                {status !== 'success' ? (
+                  <form onSubmit={handleFormSubmit} className="space-y-6">
+                    <h3 className="text-xl font-heading font-extrabold text-white mb-2 flex items-center space-x-2">
+                      <i data-lucide="sparkles" className="w-5 h-5 text-cyber-teal animate-pulse"></i>
+                      <span>Send Message</span>
+                    </h3>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block">Full Name</label>
+                      <input type="text" name="name" value={formData.name} onChange={handleInputChange} disabled={status === 'loading'} placeholder="e.g. Piyush Sharma" className={`w-full px-4 py-3 bg-white/2 border rounded-xl font-sans text-sm text-white placeholder-slate-600 transition-all duration-300 focus:outline-none focus:bg-white/5 ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-white/5 focus:border-cyber-teal focus:shadow-neon-teal'}`} />
+                      {errors.name && <span className="text-[10px] font-mono text-red-400">{errors.name}</span>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block">Email Address</label>
+                      <input type="email" name="email" value={formData.email} onChange={handleInputChange} disabled={status === 'loading'} placeholder="e.g. client@agency.com" className={`w-full px-4 py-3 bg-white/2 border rounded-xl font-sans text-sm text-white placeholder-slate-600 transition-all duration-300 focus:outline-none focus:bg-white/5 ${errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-white/5 focus:border-cyber-purple focus:shadow-neon-purple'}`} />
+                      {errors.email && <span className="text-[10px] font-mono text-red-400">{errors.email}</span>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block">Message Transmission</label>
+                      <textarea name="message" value={formData.message} onChange={handleInputChange} disabled={status === 'loading'} rows="4" placeholder="What is your idea..." className={`w-full px-4 py-3 bg-white/2 border rounded-xl font-sans text-sm text-white placeholder-slate-600 transition-all duration-300 focus:outline-none focus:bg-white/5 resize-none ${errors.message ? 'border-red-500/50 focus:border-red-500' : 'border-white/5 focus:border-cyber-teal focus:shadow-neon-teal'}`} />
+                      {errors.message && <span className="text-[10px] font-mono text-red-400">{errors.message}</span>}
+                    </div>
+
+                    <button type="submit" disabled={status === 'loading'} className="w-full py-4 bg-gradient-to-r from-cyber-teal to-cyber-purple hover:from-cyber-purple hover:to-cyber-teal text-white font-heading font-extrabold uppercase tracking-widest text-xs rounded-xl transition-all duration-500 flex items-center justify-center space-x-2.5 border border-white/5 shadow-neon-teal disabled:opacity-50">
+                      {status === 'loading' ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <span>Transmit Message</span>
+                      )}
+                    </button>
+                  </form>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-12 text-center space-y-6">
+                    <div className="p-4 bg-cyber-green/10 border border-cyber-green/30 rounded-full animate-bounce shadow-neon-green">
+                      <i data-lucide="check-circle-2" className="w-10 h-10 text-cyber-green"></i>
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-heading font-extrabold text-white tracking-wide">TRANSMISSION RECEIVED</h3>
+                      <p className="text-[10px] font-mono font-semibold text-cyber-teal uppercase tracking-widest animate-pulse">Holographic Code: SUCCESS_200</p>
+                    </div>
+                    <p className="text-sm text-slate-400 max-w-sm font-light leading-relaxed">
+                      Thank you, your message has bypassed firewalls and landed directly in my console. I will respond to you shortly!
+                    </p>
+                    <button onClick={() => setStatus('idle')} className="px-6 py-2.5 border border-white/10 hover:border-cyber-teal bg-white/5 hover:bg-cyber-teal/5 text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-cyber-teal rounded-lg transition-all">Send Another Transmission</button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // 9. Minimal Footer Component
+    const Footer = () => {
+      const currentYear = new Date().getFullYear();
+      
+      const socialItems = [
+        { name: 'GitHub', href: '#', path: "M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" },
+        { name: 'LinkedIn', href: '#', path: "M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" }
+      ];
+
+      return (
+        <footer className="relative w-full bg-obsidian py-12 border-t border-white/5 overflow-hidden z-10">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[450px] h-[150px] rounded-full bg-cyber-purple/5 blur-[80px] pointer-events-none -z-10" />
+
+          <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center space-y-8">
+            <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="p-3 border border-white/10 hover:border-cyber-teal bg-white/5 rounded-full hover:text-cyber-teal transition-all shadow-[0_4px_15px_rgba(0,0,0,0.5)] group">
+              <i data-lucide="chevron-up" className="w-5 h-5 group-hover:translate-y-[-2px] transition-transform"></i>
+            </button>
+
+            {/* Social pills */}
+            <div className="flex items-center space-x-6">
+              {socialItems.map((social) => (
+                <a key={social.name} href={social.href} className="p-2.5 border border-white/5 hover:border-cyber-purple bg-white/2 hover:bg-cyber-purple/10 text-slate-400 hover:text-white rounded-xl transition-all hover:scale-110" title={social.name}>
+                  <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24"><path d={social.path}></path></svg>
+                </a>
+              ))}
+            </div>
+
+            <div className="text-center space-y-2 pt-6 border-t border-white/5 w-full max-w-md font-mono text-[10px] text-slate-500 uppercase tracking-widest">
+              <p>Designed & Developed by <span className="bg-gradient-to-r from-cyber-teal to-cyber-purple bg-clip-text text-transparent font-bold">Piyush</span></p>
+              <p className="text-[9px] text-slate-600">&copy; {currentYear} PIYUSH.DEV. All Rights Reserved.</p>
+            </div>
+          </div>
+        </footer>
+      );
+    };
+
+    // 10. Main Core Application Assembly Component
+    const App = () => {
+      const [activeSection, setActiveSection] = useState('home');
+      const [isDarkMode, setIsDarkMode] = useState(true);
+
+      // Initialize Lenis smooth scroll globally inside independent HTML environment
+      useEffect(() => {
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+        });
+        const raf = (time) => {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        };
+        requestAnimationFrame(raf);
+        
+        // Refresh Lucide icons in UMD space
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+
+        return () => lenis.destroy();
+      }, []);
+
+      // Active Section Observer
+      useEffect(() => {
+        const sections = document.querySelectorAll('section, div[id="projects"]');
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) setActiveSection(entry.target.id);
+          });
+        }, { rootMargin: '-30% 0px -40% 0px' });
+
+        sections.forEach((s) => observer.observe(s));
+        return () => observer.disconnect();
+      }, []);
+
+      // Re-trigger Lucide icons creation upon DOM updates
+      useEffect(() => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+
+      const toggleTheme = () => {
+        setIsDarkMode((prev) => {
+          const next = !prev;
+          if (next) {
+            document.documentElement.classList.remove('light-theme');
+          } else {
+            document.documentElement.classList.add('light-theme');
+          }
+          return next;
+        });
+      };
+
+      return (
+        <React.Fragment>
+          <CustomCursor />
+          <Navbar activeSection={activeSection} isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+          <main className="relative z-10 w-full overflow-hidden">
+            <Hero />
+            <About />
+            <Skills />
+            <Projects />
+            <Timeline />
+            <Contact />
+          </main>
+          <Footer />
+        </React.Fragment>
+      );
+    };
+
+    // Render React App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
